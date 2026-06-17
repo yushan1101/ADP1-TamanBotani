@@ -1,0 +1,1 @@
+import React from "react"; import { VisitorCheckInModule } from "../../subsystems/registration/VisitorCheckInModule"; export function KioskQRCheckInPage(props){return <VisitorCheckInModule {...props} mode="qr"/>}

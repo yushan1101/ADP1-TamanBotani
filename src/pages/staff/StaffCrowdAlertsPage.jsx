@@ -1,0 +1,1 @@
+import React from "react"; import { PeakCrowdAlertModule } from "../../subsystems/ai-feedback/PeakCrowdAlertModule"; export function StaffCrowdAlertsPage(props){return <PeakCrowdAlertModule {...props}/>}

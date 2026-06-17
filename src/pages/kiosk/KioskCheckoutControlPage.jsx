@@ -1,0 +1,1 @@
+import React from "react"; import { VisitorCheckOutModule } from "../../subsystems/registration/VisitorCheckOutModule"; export function KioskCheckoutControlPage(props){return <VisitorCheckOutModule {...props}/>}

@@ -1,0 +1,9 @@
+import React, { useState } from "react";
+import { KioskLayout } from "./KioskLayout";
+import { KioskQRCheckInPage } from "./KioskQRCheckInPage";
+import { KioskFaceIdCheckInPage } from "./KioskFaceIdCheckInPage";
+import { KioskCheckoutControlPage } from "./KioskCheckoutControlPage";
+import { KioskOfflineEntryPage } from "./KioskOfflineEntryPage";
+import { KioskMonitorPage } from "./KioskMonitorPage";
+import { KioskLogsPage } from "./KioskLogsPage";
+export function KioskApp({ appState, setAppState, onBack }) { const [page,setPage]=useState("qr"); const titles={qr:"QR Check-In",face:"Face ID Check-In",checkout:"Checkout Control",offline:"Offline Fast Entry",monitor:"Kiosk Monitor",logs:"Logs"}; const props={appState,setAppState}; const views={qr:<KioskQRCheckInPage {...props}/>,face:<KioskFaceIdCheckInPage {...props}/>,checkout:<KioskCheckoutControlPage {...props}/>,offline:<KioskOfflineEntryPage {...props}/>,monitor:<KioskMonitorPage {...props}/>,logs:<KioskLogsPage {...props}/>}; return <KioskLayout page={page} setPage={setPage} title={titles[page]} onBack={onBack}>{views[page]}</KioskLayout>; }

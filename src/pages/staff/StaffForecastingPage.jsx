@@ -1,0 +1,1 @@
+import React from "react"; import { VisitorForecastingModule } from "../../subsystems/ai-feedback/VisitorForecastingModule"; export function StaffForecastingPage(props){return <VisitorForecastingModule {...props}/>}

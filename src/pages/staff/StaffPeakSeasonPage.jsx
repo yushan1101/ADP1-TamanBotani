@@ -1,0 +1,1 @@
+import React from "react"; import { PeakSeasonPredictionModule } from "../../subsystems/ai-feedback/PeakSeasonPredictionModule"; export function StaffPeakSeasonPage(props){return <PeakSeasonPredictionModule {...props}/>}

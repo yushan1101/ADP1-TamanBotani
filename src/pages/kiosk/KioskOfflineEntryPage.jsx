@@ -1,0 +1,1 @@
+import React from "react"; import { OfflineFastEntryModule } from "../../subsystems/registration/OfflineFastEntryModule"; export function KioskOfflineEntryPage(props){return <OfflineFastEntryModule {...props}/>}
