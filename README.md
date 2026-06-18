@@ -34,13 +34,6 @@
 
 ---
 
-## Project Management
-
-- **Trello:** [Trello Board Link Here]
-- **GitHub:** https://github.com/yushan1101/ADP1-TamanBotani
-
----
-
 ## Full System Prototype
 
 This repository contains the merged full-system frontend prototype for the **Taman Botani Johor Visitor Management System**.
@@ -129,6 +122,10 @@ The system is organized into three role-based interfaces:
     <td style="border: 1px solid #999; padding: 8px;">
       <ul>
         <li><a href="src/subsystems/monitoring/MonitoringModule.jsx">src/subsystems/monitoring/MonitoringModule.jsx</a></li>
+        <li><a href="src/subsystems/monitoring/live-dashboard/LiveDashboard.jsx">src/subsystems/monitoring/live-dashboard/LiveDashboard.jsx</a></li>
+        <li><a href="src/subsystems/monitoring/live-dashboard/LiveStats.jsx">src/subsystems/monitoring/live-dashboard/LiveStats.jsx</a></li>
+        <li><a href="src/subsystems/monitoring/live-dashboard/ActivityFeed.jsx">src/subsystems/monitoring/live-dashboard/ActivityFeed.jsx</a></li>
+        <li><a href="src/subsystems/monitoring/live-dashboard/AlertPanel.jsx">src/subsystems/monitoring/live-dashboard/AlertPanel.jsx</a></li>
         <li><a href="src/pages/staff/StaffOverviewPage.jsx">src/pages/staff/StaffOverviewPage.jsx</a></li>
         <li><a href="src/pages/staff/StaffLiveMonitoringPage.jsx">src/pages/staff/StaffLiveMonitoringPage.jsx</a></li>
       </ul>
@@ -139,7 +136,10 @@ The system is organized into three role-based interfaces:
     <td style="border: 1px solid #999; padding: 8px;"><strong>Visitor Analytics & Demographic Module</strong></td>
     <td style="border: 1px solid #999; padding: 8px;">
       <ul>
-        <li><a href="src/subsystems/monitoring/MonitoringModule.jsx">src/subsystems/monitoring/MonitoringModule.jsx</a></li>
+        <li><a href="src/subsystems/monitoring/analytics/AnalyticsPage.jsx">src/subsystems/monitoring/analytics/AnalyticsPage.jsx</a></li>
+        <li><a href="src/subsystems/monitoring/analytics/VisitorTrendChart.jsx">src/subsystems/monitoring/analytics/VisitorTrendChart.jsx</a></li>
+        <li><a href="src/subsystems/monitoring/analytics/Demographics.jsx">src/subsystems/monitoring/analytics/Demographics.jsx</a></li>
+        <li><a href="src/subsystems/monitoring/analytics/PeakHours.jsx">src/subsystems/monitoring/analytics/PeakHours.jsx</a></li>
         <li><a href="src/pages/staff/StaffAnalyticsPage.jsx">src/pages/staff/StaffAnalyticsPage.jsx</a></li>
       </ul>
     </td>
@@ -149,7 +149,11 @@ The system is organized into three role-based interfaces:
     <td style="border: 1px solid #999; padding: 8px;"><strong>Zone & Crowd Monitoring Module</strong></td>
     <td style="border: 1px solid #999; padding: 8px;">
       <ul>
-        <li><a href="src/subsystems/monitoring/MonitoringModule.jsx">src/subsystems/monitoring/MonitoringModule.jsx</a></li>
+        <li><a href="src/subsystems/monitoring/ZoneCrowdMonitoringModule.jsx">src/subsystems/monitoring/ZoneCrowdMonitoringModule.jsx</a></li>
+        <li><a href="src/subsystems/monitoring/zone-crowd/ZonePage.jsx">src/subsystems/monitoring/zone-crowd/ZonePage.jsx</a></li>
+        <li><a href="src/subsystems/monitoring/zone-crowd/ZoneList.jsx">src/subsystems/monitoring/zone-crowd/ZoneList.jsx</a></li>
+        <li><a href="src/subsystems/monitoring/zone-crowd/Heatmap.jsx">src/subsystems/monitoring/zone-crowd/Heatmap.jsx</a></li>
+        <li><a href="src/subsystems/monitoring/zone-crowd/CrowdFlow.jsx">src/subsystems/monitoring/zone-crowd/CrowdFlow.jsx</a></li>
         <li><a href="src/pages/staff/StaffZoneCrowdPage.jsx">src/pages/staff/StaffZoneCrowdPage.jsx</a></li>
         <li><a href="src/pages/visitor/VisitorMapPage.jsx">src/pages/visitor/VisitorMapPage.jsx</a></li>
       </ul>
@@ -160,7 +164,11 @@ The system is organized into three role-based interfaces:
     <td style="border: 1px solid #999; padding: 8px;"><strong>Visitor Search & Tracking Module</strong></td>
     <td style="border: 1px solid #999; padding: 8px;">
       <ul>
-        <li><a href="src/subsystems/monitoring/MonitoringModule.jsx">src/subsystems/monitoring/MonitoringModule.jsx</a></li>
+        <li><a href="src/subsystems/monitoring/VisitorSearchTrackingModule.jsx">src/subsystems/monitoring/VisitorSearchTrackingModule.jsx</a></li>
+        <li><a href="src/subsystems/monitoring/visitor-records/VisitorRecordsPage.jsx">src/subsystems/monitoring/visitor-records/VisitorRecordsPage.jsx</a></li>
+        <li><a href="src/subsystems/monitoring/visitor-records/VisitorTable.jsx">src/subsystems/monitoring/visitor-records/VisitorTable.jsx</a></li>
+        <li><a href="src/subsystems/monitoring/visitor-records/SearchBar.jsx">src/subsystems/monitoring/visitor-records/SearchBar.jsx</a></li>
+        <li><a href="src/subsystems/monitoring/visitor-records/VisitorDetail.jsx">src/subsystems/monitoring/visitor-records/VisitorDetail.jsx</a></li>
         <li><a href="src/pages/staff/StaffVisitorRecordsPage.jsx">src/pages/staff/StaffVisitorRecordsPage.jsx</a></li>
         <li><a href="src/pages/visitor/VisitorVisitHistoryPage.jsx">src/pages/visitor/VisitorVisitHistoryPage.jsx</a></li>
       </ul>
@@ -171,7 +179,10 @@ The system is organized into three role-based interfaces:
     <td style="border: 1px solid #999; padding: 8px;"><strong>Visitor Journey & Experience Module</strong></td>
     <td style="border: 1px solid #999; padding: 8px;">
       <ul>
-        <li><a href="src/subsystems/monitoring/MonitoringModule.jsx">src/subsystems/monitoring/MonitoringModule.jsx</a></li>
+        <li><a href="src/subsystems/monitoring/journey/JourneyPage.jsx">src/subsystems/monitoring/journey/JourneyPage.jsx</a></li>
+        <li><a href="src/subsystems/monitoring/journey/RouteDiagram.jsx">src/subsystems/monitoring/journey/RouteDiagram.jsx</a></li>
+        <li><a href="src/subsystems/monitoring/journey/DropOffAnalysis.jsx">src/subsystems/monitoring/journey/DropOffAnalysis.jsx</a></li>
+        <li><a href="src/subsystems/monitoring/journey/DwellTimeChart.jsx">src/subsystems/monitoring/journey/DwellTimeChart.jsx</a></li>
         <li><a href="src/pages/staff/StaffJourneyExperiencePage.jsx">src/pages/staff/StaffJourneyExperiencePage.jsx</a></li>
       </ul>
     </td>
@@ -181,11 +192,16 @@ The system is organized into three role-based interfaces:
     <td style="border: 1px solid #999; padding: 8px;"><strong>Generation & Export Module</strong></td>
     <td style="border: 1px solid #999; padding: 8px;">
       <ul>
-        <li><a href="src/subsystems/monitoring/MonitoringModule.jsx">src/subsystems/monitoring/MonitoringModule.jsx</a></li>
+        <li><a href="src/subsystems/monitoring/reports/ReportsPage.jsx">src/subsystems/monitoring/reports/ReportsPage.jsx</a></li>
+        <li><a href="src/subsystems/monitoring/reports/ReportBuilder.jsx">src/subsystems/monitoring/reports/ReportBuilder.jsx</a></li>
+        <li><a href="src/subsystems/monitoring/reports/SchedulePanel.jsx">src/subsystems/monitoring/reports/SchedulePanel.jsx</a></li>
+        <li><a href="src/subsystems/monitoring/reports/HistoryTable.jsx">src/subsystems/monitoring/reports/HistoryTable.jsx</a></li>
+        <li><a href="src/subsystems/monitoring/utils/download.js">src/subsystems/monitoring/utils/download.js</a></li>
         <li><a href="src/pages/staff/StaffReportsPage.jsx">src/pages/staff/StaffReportsPage.jsx</a></li>
       </ul>
     </td>
   </tr>
+
 </table>
 
 ---
