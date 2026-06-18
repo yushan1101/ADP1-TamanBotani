@@ -1,6 +1,11 @@
 import React from "react";
-import { MonitoringModule } from "../../subsystems/monitoring/MonitoringModule";
+import { MonitoringProviders } from "../../subsystems/monitoring/MonitoringProviders";
+import { VisitorRecordsPage } from "../../subsystems/monitoring/visitor-records/VisitorRecordsPage";
 
 export function StaffVisitorRecordsPage() {
-  return <MonitoringModule initialTab="records" />;
+  return (
+    <MonitoringProviders>
+      <VisitorRecordsPage />
+    </MonitoringProviders>
+  );
 }

@@ -1,6 +1,6 @@
 import React from "react";
-import { AlertTriangle, Map } from "lucide-react";
-import { zones } from "../../data/appState";
-export function ZoneCrowdMonitoringModule({ visitor = false }) {
-  return <section className={visitor ? "mobileModule" : "panel"}><div className="sectionHead"><div><p className="eyebrow">Subsystem 2</p><h2>{visitor ? "Park Map" : "Zone & Crowd Monitoring Module"}</h2><p>{visitor ? "Friendly crowd status for visitors." : "Zone heatmap, occupancy thresholds, visitor flow and popularity ranking."}</p></div><Map size={30}/></div><div className="zoneMap">{zones.map((z,i)=><div className={`zoneBubble ${z.status.toLowerCase()}`} key={z.name} style={{left:`${10+(i%3)*30}%`,top:`${20+Math.floor(i/3)*38}%`}}><strong>{z.name}</strong><span>{visitor ? z.status : `${z.count}/${z.capacity}`}</span></div>)}</div>{!visitor && <><div className="subPanel"><h3>Visitor Flow Between Zones</h3>{["Main Gate → Lake Trail", "Lake Trail → Orchid Garden", "Orchid Garden → Cafe Court", "Cafe Court → Exit"].map((p,i)=><div className="ratioLine" key={p}><span>{p}</span><b>{84-i*13} visitors</b><progress value={84-i*13} max="100"/></div>)}</div><div className="notice amber"><AlertTriangle size={18}/> Orchid Garden exceeded 80% capacity. Recommended action: redirect visitors to Lake Trail.</div></>}</section>;
+import { ZonePage } from "./zone-crowd/ZonePage";
+
+export function ZoneCrowdMonitoringModule({ visitor }) {
+  return <ZonePage visitor={visitor} />;
 }

@@ -1,6 +1,11 @@
 import React from "react";
-import { MonitoringModule } from "../../subsystems/monitoring/MonitoringModule";
+import { MonitoringProviders } from "../../subsystems/monitoring/MonitoringProviders";
+import { ZonePage } from "../../subsystems/monitoring/zone-crowd/ZonePage";
 
 export function StaffZoneCrowdPage() {
-  return <MonitoringModule initialTab="zones" />;
+  return (
+    <MonitoringProviders>
+      <ZonePage />
+    </MonitoringProviders>
+  );
 }
