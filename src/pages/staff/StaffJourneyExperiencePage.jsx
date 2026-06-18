@@ -1,6 +1,11 @@
 import React from "react";
-import { MonitoringModule } from "../../subsystems/monitoring/MonitoringModule";
+import { MonitoringProviders } from "../../subsystems/monitoring/MonitoringProviders";
+import { JourneyPage } from "../../subsystems/monitoring/journey/JourneyPage";
 
 export function StaffJourneyExperiencePage() {
-  return <MonitoringModule initialTab="journey" />;
+  return (
+    <MonitoringProviders>
+      <JourneyPage />
+    </MonitoringProviders>
+  );
 }

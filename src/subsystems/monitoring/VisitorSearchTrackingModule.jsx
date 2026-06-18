@@ -1,7 +1,6 @@
-import React, { useState } from "react";
-import { Search, ShieldAlert } from "lucide-react";
-export function VisitorSearchTrackingModule({ appState, visitor = false }) {
-  const [query, setQuery] = useState(""); const records = appState.visits.filter(v => !query || v.name.toLowerCase().includes(query.toLowerCase()) || v.visitorId.toLowerCase().includes(query.toLowerCase()));
-  if (visitor) return <section className="mobileModule"><h2>My Visit History</h2>{appState.visits.slice(0,4).map(v=><div className="visitCard" key={v.id}><strong>{v.name}</strong><span>{v.checkInTime}</span><em>{v.status} | {v.channel}</em></div>)}</section>;
-  return <section className="panel"><div className="sectionHead"><div><p className="eyebrow">Subsystem 2</p><h2>Visitor Search & Tracking Module</h2><p>Search visitor records, view visit history, current status, last known zone and security flags.</p></div><Search size={30}/></div><label>Search by name / ID<input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search visitor"/></label><table className="dataTable"><thead><tr><th>Name</th><th>ID</th><th>Status</th><th>Last Zone</th><th>Channel</th><th>Flag</th></tr></thead><tbody>{records.map(v=><tr key={v.id}><td>{v.name}</td><td>{v.visitorId}</td><td>{v.status}</td><td>{v.zone}</td><td>{v.channel}</td><td>{v.stillInside ? <span className="badge amber"><ShieldAlert size={14}/> Still inside</span> : "-"}</td></tr>)}</tbody></table></section>;
+import React from "react";
+import { VisitorRecordsPage } from "./visitor-records/VisitorRecordsPage";
+
+export function VisitorSearchTrackingModule(props) {
+  return <VisitorRecordsPage {...props} />;
 }
