@@ -65,9 +65,9 @@ The system is organized into three role-based interfaces:
     <td style="border: 1px solid #999; padding: 8px;"><strong>Visitor Registration Module</strong></td>
     <td style="border: 1px solid #999; padding: 8px;">
       <ul>
-        <li><a href="src/subsystems/registration/VisitorRegistrationModule.jsx">src/subsystems/registration/VisitorRegistrationModule.jsx</a></li>
-        <li><a href="src/pages/visitor/VisitorRegistrationPage.jsx">src/pages/visitor/VisitorRegistrationPage.jsx</a></li>
-        <li><a href="src/pages/kiosk/KioskMonitorPage.jsx">src/pages/kiosk/KioskMonitorPage.jsx</a></li>
+        <li><a href="src/subsystems/registration/VisitorRegistrationModule.jsx">VisitorRegistrationModule.jsx</a></li>
+        <li><a href="src/pages/visitor/VisitorRegistrationPage.jsx">VisitorRegistrationPage.jsx</a></li>
+        <li><a href="src/pages/kiosk/KioskMonitorPage.jsx">KioskMonitorPage.jsx</a></li>
       </ul>
     </td>
   </tr>
@@ -76,10 +76,10 @@ The system is organized into three role-based interfaces:
     <td style="border: 1px solid #999; padding: 8px;"><strong>Visitor Check-In Module</strong></td>
     <td style="border: 1px solid #999; padding: 8px;">
       <ul>
-        <li><a href="src/subsystems/registration/VisitorCheckInModule.jsx">src/subsystems/registration/VisitorCheckInModule.jsx</a></li>
-        <li><a href="src/pages/visitor/VisitorQRCodePage.jsx">src/pages/visitor/VisitorQRCodePage.jsx</a></li>
-        <li><a href="src/pages/kiosk/KioskQRCheckInPage.jsx">src/pages/kiosk/KioskQRCheckInPage.jsx</a></li>
-        <li><a href="src/pages/kiosk/KioskFaceIdCheckInPage.jsx">src/pages/kiosk/KioskFaceIdCheckInPage.jsx</a></li>
+        <li><a href="src/subsystems/registration/VisitorCheckInModule.jsx">VisitorCheckInModule.jsx</a></li>
+        <li><a href="src/pages/visitor/VisitorQRCodePage.jsx">VisitorQRCodePage.jsx</a></li>
+        <li><a href="src/pages/kiosk/KioskQRCheckInPage.jsx">KioskQRCheckInPage.jsx</a></li>
+        <li><a href="src/pages/kiosk/KioskFaceIdCheckInPage.jsx">KioskFaceIdCheckInPage.jsx</a></li>
       </ul>
     </td>
   </tr>
@@ -88,9 +88,9 @@ The system is organized into three role-based interfaces:
     <td style="border: 1px solid #999; padding: 8px;"><strong>Visitor Check-Out Module</strong></td>
     <td style="border: 1px solid #999; padding: 8px;">
       <ul>
-        <li><a href="src/subsystems/registration/VisitorCheckOutModule.jsx">src/subsystems/registration/VisitorCheckOutModule.jsx</a></li>
-        <li><a href="src/pages/visitor/VisitorCheckoutPage.jsx">src/pages/visitor/VisitorCheckoutPage.jsx</a></li>
-        <li><a href="src/pages/kiosk/KioskCheckoutControlPage.jsx">src/pages/kiosk/KioskCheckoutControlPage.jsx</a></li>
+        <li><a href="src/subsystems/registration/VisitorCheckOutModule.jsx">VisitorCheckOutModule.jsx</a></li>
+        <li><a href="src/pages/visitor/VisitorCheckoutPage.jsx">VisitorCheckoutPage.jsx</a></li>
+        <li><a href="src/pages/kiosk/KioskCheckoutControlPage.jsx">KioskCheckoutControlPage.jsx</a></li>
       </ul>
     </td>
   </tr>
@@ -99,9 +99,9 @@ The system is organized into three role-based interfaces:
     <td style="border: 1px solid #999; padding: 8px;"><strong>Offline & Fast Entry Module</strong></td>
     <td style="border: 1px solid #999; padding: 8px;">
       <ul>
-        <li><a href="src/subsystems/registration/OfflineFastEntryModule.jsx">src/subsystems/registration/OfflineFastEntryModule.jsx</a></li>
-        <li><a href="src/pages/kiosk/KioskOfflineEntryPage.jsx">src/pages/kiosk/KioskOfflineEntryPage.jsx</a></li>
-        <li><a href="src/pages/kiosk/KioskLogsPage.jsx">src/pages/kiosk/KioskLogsPage.jsx</a></li>
+        <li><a href="src/subsystems/registration/OfflineFastEntryModule.jsx">OfflineFastEntryModule.jsx</a></li>
+        <li><a href="src/pages/kiosk/KioskOfflineEntryPage.jsx">KioskOfflineEntryPage.jsx</a></li>
+        <li><a href="src/pages/kiosk/KioskLogsPage.jsx">KioskLogsPage.jsx</a></li>
       </ul>
     </td>
   </tr>
@@ -121,13 +121,13 @@ The system is organized into three role-based interfaces:
     <td style="border: 1px solid #999; padding: 8px;"><strong>Real-Time Monitoring Dashboard Module</strong></td>
     <td style="border: 1px solid #999; padding: 8px;">
       <ul>
-        <li><a href="src/subsystems/monitoring/MonitoringModule.jsx">src/subsystems/monitoring/MonitoringModule.jsx</a></li>
-        <li><a href="src/subsystems/monitoring/live-dashboard/LiveDashboard.jsx">src/subsystems/monitoring/live-dashboard/LiveDashboard.jsx</a></li>
-        <li><a href="src/subsystems/monitoring/live-dashboard/LiveStats.jsx">src/subsystems/monitoring/live-dashboard/LiveStats.jsx</a></li>
-        <li><a href="src/subsystems/monitoring/live-dashboard/ActivityFeed.jsx">src/subsystems/monitoring/live-dashboard/ActivityFeed.jsx</a></li>
-        <li><a href="src/subsystems/monitoring/live-dashboard/AlertPanel.jsx">src/subsystems/monitoring/live-dashboard/AlertPanel.jsx</a></li>
-        <li><a href="src/pages/staff/StaffOverviewPage.jsx">src/pages/staff/StaffOverviewPage.jsx</a></li>
-        <li><a href="src/pages/staff/StaffLiveMonitoringPage.jsx">src/pages/staff/StaffLiveMonitoringPage.jsx</a></li>
+        <li><a href="src/subsystems/monitoring/MonitoringModule.jsx">MonitoringModule.jsx</a></li>
+        <li><a href="src/subsystems/monitoring/live-dashboard/LiveDashboard.jsx">/LiveDashboard.jsx</a></li>
+        <li><a href="src/subsystems/monitoring/live-dashboard/LiveStats.jsx">LiveStats.jsx</a></li>
+        <li><a href="src/subsystems/monitoring/live-dashboard/ActivityFeed.jsx">ActivityFeed.jsx</a></li>
+        <li><a href="src/subsystems/monitoring/live-dashboard/AlertPanel.jsx">AlertPanel.jsx</a></li>
+        <li><a href="src/pages/staff/StaffOverviewPage.jsx">StaffOverviewPage.jsx</a></li>
+        <li><a href="src/pages/staff/StaffLiveMonitoringPage.jsx">StaffLiveMonitoringPage.jsx</a></li>
       </ul>
     </td>
   </tr>
@@ -136,11 +136,11 @@ The system is organized into three role-based interfaces:
     <td style="border: 1px solid #999; padding: 8px;"><strong>Visitor Analytics & Demographic Module</strong></td>
     <td style="border: 1px solid #999; padding: 8px;">
       <ul>
-        <li><a href="src/subsystems/monitoring/analytics/AnalyticsPage.jsx">src/subsystems/monitoring/analytics/AnalyticsPage.jsx</a></li>
-        <li><a href="src/subsystems/monitoring/analytics/VisitorTrendChart.jsx">src/subsystems/monitoring/analytics/VisitorTrendChart.jsx</a></li>
-        <li><a href="src/subsystems/monitoring/analytics/Demographics.jsx">src/subsystems/monitoring/analytics/Demographics.jsx</a></li>
-        <li><a href="src/subsystems/monitoring/analytics/PeakHours.jsx">src/subsystems/monitoring/analytics/PeakHours.jsx</a></li>
-        <li><a href="src/pages/staff/StaffAnalyticsPage.jsx">src/pages/staff/StaffAnalyticsPage.jsx</a></li>
+        <li><a href="src/subsystems/monitoring/analytics/AnalyticsPage.jsx">AnalyticsPage.jsx</a></li>
+        <li><a href="src/subsystems/monitoring/analytics/VisitorTrendChart.jsx">VisitorTrendChart.jsx</a></li>
+        <li><a href="src/subsystems/monitoring/analytics/Demographics.jsx">Demographics.jsx</a></li>
+        <li><a href="src/subsystems/monitoring/analytics/PeakHours.jsx">PeakHours.jsx</a></li>
+        <li><a href="src/pages/staff/StaffAnalyticsPage.jsx">StaffAnalyticsPage.jsx</a></li>
       </ul>
     </td>
   </tr>
@@ -149,13 +149,13 @@ The system is organized into three role-based interfaces:
     <td style="border: 1px solid #999; padding: 8px;"><strong>Zone & Crowd Monitoring Module</strong></td>
     <td style="border: 1px solid #999; padding: 8px;">
       <ul>
-        <li><a href="src/subsystems/monitoring/ZoneCrowdMonitoringModule.jsx">src/subsystems/monitoring/ZoneCrowdMonitoringModule.jsx</a></li>
-        <li><a href="src/subsystems/monitoring/zone-crowd/ZonePage.jsx">src/subsystems/monitoring/zone-crowd/ZonePage.jsx</a></li>
-        <li><a href="src/subsystems/monitoring/zone-crowd/ZoneList.jsx">src/subsystems/monitoring/zone-crowd/ZoneList.jsx</a></li>
-        <li><a href="src/subsystems/monitoring/zone-crowd/Heatmap.jsx">src/subsystems/monitoring/zone-crowd/Heatmap.jsx</a></li>
-        <li><a href="src/subsystems/monitoring/zone-crowd/CrowdFlow.jsx">src/subsystems/monitoring/zone-crowd/CrowdFlow.jsx</a></li>
-        <li><a href="src/pages/staff/StaffZoneCrowdPage.jsx">src/pages/staff/StaffZoneCrowdPage.jsx</a></li>
-        <li><a href="src/pages/visitor/VisitorMapPage.jsx">src/pages/visitor/VisitorMapPage.jsx</a></li>
+        <li><a href="src/subsystems/monitoring/ZoneCrowdMonitoringModule.jsx">ZoneCrowdMonitoringModule.jsx</a></li>
+        <li><a href="src/subsystems/monitoring/zone-crowd/ZonePage.jsx">ZonePage.jsx</a></li>
+        <li><a href="src/subsystems/monitoring/zone-crowd/ZoneList.jsx">ZoneList.jsx</a></li>
+        <li><a href="src/subsystems/monitoring/zone-crowd/Heatmap.jsx">Heatmap.jsx</a></li>
+        <li><a href="src/subsystems/monitoring/zone-crowd/CrowdFlow.jsx">CrowdFlow.jsx</a></li>
+        <li><a href="src/pages/staff/StaffZoneCrowdPage.jsx">StaffZoneCrowdPage.jsx</a></li>
+        <li><a href="src/pages/visitor/VisitorMapPage.jsx">VisitorMapPage.jsx</a></li>
       </ul>
     </td>
   </tr>
@@ -164,13 +164,13 @@ The system is organized into three role-based interfaces:
     <td style="border: 1px solid #999; padding: 8px;"><strong>Visitor Search & Tracking Module</strong></td>
     <td style="border: 1px solid #999; padding: 8px;">
       <ul>
-        <li><a href="src/subsystems/monitoring/VisitorSearchTrackingModule.jsx">src/subsystems/monitoring/VisitorSearchTrackingModule.jsx</a></li>
-        <li><a href="src/subsystems/monitoring/visitor-records/VisitorRecordsPage.jsx">src/subsystems/monitoring/visitor-records/VisitorRecordsPage.jsx</a></li>
-        <li><a href="src/subsystems/monitoring/visitor-records/VisitorTable.jsx">src/subsystems/monitoring/visitor-records/VisitorTable.jsx</a></li>
-        <li><a href="src/subsystems/monitoring/visitor-records/SearchBar.jsx">src/subsystems/monitoring/visitor-records/SearchBar.jsx</a></li>
-        <li><a href="src/subsystems/monitoring/visitor-records/VisitorDetail.jsx">src/subsystems/monitoring/visitor-records/VisitorDetail.jsx</a></li>
-        <li><a href="src/pages/staff/StaffVisitorRecordsPage.jsx">src/pages/staff/StaffVisitorRecordsPage.jsx</a></li>
-        <li><a href="src/pages/visitor/VisitorVisitHistoryPage.jsx">src/pages/visitor/VisitorVisitHistoryPage.jsx</a></li>
+        <li><a href="src/subsystems/monitoring/VisitorSearchTrackingModule.jsx">VisitorSearchTrackingModule.jsx</a></li>
+        <li><a href="src/subsystems/monitoring/visitor-records/VisitorRecordsPage.jsx">VisitorRecordsPage.jsx</a></li>
+        <li><a href="src/subsystems/monitoring/visitor-records/VisitorTable.jsx">VisitorTable.jsx</a></li>
+        <li><a href="src/subsystems/monitoring/visitor-records/SearchBar.jsx">SearchBar.jsx</a></li>
+        <li><a href="src/subsystems/monitoring/visitor-records/VisitorDetail.jsx">VisitorDetail.jsx</a></li>
+        <li><a href="src/pages/staff/StaffVisitorRecordsPage.jsx">StaffVisitorRecordsPage.jsx</a></li>
+        <li><a href="src/pages/visitor/VisitorVisitHistoryPage.jsx">VisitorVisitHistoryPage.jsx</a></li>
       </ul>
     </td>
   </tr>
@@ -179,11 +179,11 @@ The system is organized into three role-based interfaces:
     <td style="border: 1px solid #999; padding: 8px;"><strong>Visitor Journey & Experience Module</strong></td>
     <td style="border: 1px solid #999; padding: 8px;">
       <ul>
-        <li><a href="src/subsystems/monitoring/journey/JourneyPage.jsx">src/subsystems/monitoring/journey/JourneyPage.jsx</a></li>
-        <li><a href="src/subsystems/monitoring/journey/RouteDiagram.jsx">src/subsystems/monitoring/journey/RouteDiagram.jsx</a></li>
-        <li><a href="src/subsystems/monitoring/journey/DropOffAnalysis.jsx">src/subsystems/monitoring/journey/DropOffAnalysis.jsx</a></li>
-        <li><a href="src/subsystems/monitoring/journey/DwellTimeChart.jsx">src/subsystems/monitoring/journey/DwellTimeChart.jsx</a></li>
-        <li><a href="src/pages/staff/StaffJourneyExperiencePage.jsx">src/pages/staff/StaffJourneyExperiencePage.jsx</a></li>
+        <li><a href="src/subsystems/monitoring/journey/JourneyPage.jsx">JourneyPage.jsx</a></li>
+        <li><a href="src/subsystems/monitoring/journey/RouteDiagram.jsx">RouteDiagram.jsx</a></li>
+        <li><a href="src/subsystems/monitoring/journey/DropOffAnalysis.jsx">DropOffAnalysis.jsx</a></li>
+        <li><a href="src/subsystems/monitoring/journey/DwellTimeChart.jsx">DwellTimeChart.jsx</a></li>
+        <li><a href="src/pages/staff/StaffJourneyExperiencePage.jsx">StaffJourneyExperiencePage.jsx</a></li>
       </ul>
     </td>
   </tr>
@@ -192,12 +192,12 @@ The system is organized into three role-based interfaces:
     <td style="border: 1px solid #999; padding: 8px;"><strong>Generation & Export Module</strong></td>
     <td style="border: 1px solid #999; padding: 8px;">
       <ul>
-        <li><a href="src/subsystems/monitoring/reports/ReportsPage.jsx">src/subsystems/monitoring/reports/ReportsPage.jsx</a></li>
-        <li><a href="src/subsystems/monitoring/reports/ReportBuilder.jsx">src/subsystems/monitoring/reports/ReportBuilder.jsx</a></li>
-        <li><a href="src/subsystems/monitoring/reports/SchedulePanel.jsx">src/subsystems/monitoring/reports/SchedulePanel.jsx</a></li>
-        <li><a href="src/subsystems/monitoring/reports/HistoryTable.jsx">src/subsystems/monitoring/reports/HistoryTable.jsx</a></li>
-        <li><a href="src/subsystems/monitoring/utils/download.js">src/subsystems/monitoring/utils/download.js</a></li>
-        <li><a href="src/pages/staff/StaffReportsPage.jsx">src/pages/staff/StaffReportsPage.jsx</a></li>
+        <li><a href="src/subsystems/monitoring/reports/ReportsPage.jsx">ReportsPage.jsx</a></li>
+        <li><a href="src/subsystems/monitoring/reports/ReportBuilder.jsx">ReportBuilder.jsx</a></li>
+        <li><a href="src/subsystems/monitoring/reports/SchedulePanel.jsx">SchedulePanel.jsx</a></li>
+        <li><a href="src/subsystems/monitoring/reports/HistoryTable.jsx">HistoryTable.jsx</a></li>
+        <li><a href="src/subsystems/monitoring/utils/download.js">download.js</a></li>
+        <li><a href="src/pages/staff/StaffReportsPage.jsx">StaffReportsPage.jsx</a></li>
       </ul>
     </td>
   </tr>
@@ -218,8 +218,8 @@ The system is organized into three role-based interfaces:
     <td style="border: 1px solid #999; padding: 8px;"><strong>Visitor Forecasting Module</strong></td>
     <td style="border: 1px solid #999; padding: 8px;">
       <ul>
-        <li><a href="src/subsystems/ai-feedback/VisitorForecastingModule.jsx">src/subsystems/ai-feedback/VisitorForecastingModule.jsx</a></li>
-        <li><a href="src/pages/staff/StaffForecastingPage.jsx">src/pages/staff/StaffForecastingPage.jsx</a></li>
+        <li><a href="src/subsystems/ai-feedback/VisitorForecastingModule.jsx">/VisitorForecastingModule.jsx</a></li>
+        <li><a href="src/pages/staff/StaffForecastingPage.jsx">StaffForecastingPage.jsx</a></li>
       </ul>
     </td>
   </tr>
@@ -228,8 +228,8 @@ The system is organized into three role-based interfaces:
     <td style="border: 1px solid #999; padding: 8px;"><strong>Peak Crowd Alert Module</strong></td>
     <td style="border: 1px solid #999; padding: 8px;">
       <ul>
-        <li><a href="src/subsystems/ai-feedback/PeakCrowdAlertModule.jsx">src/subsystems/ai-feedback/PeakCrowdAlertModule.jsx</a></li>
-        <li><a href="src/pages/staff/StaffCrowdAlertsPage.jsx">src/pages/staff/StaffCrowdAlertsPage.jsx</a></li>
+        <li><a href="src/subsystems/ai-feedback/PeakCrowdAlertModule.jsx">PeakCrowdAlertModule.jsx</a></li>
+        <li><a href="src/pages/staff/StaffCrowdAlertsPage.jsx">StaffCrowdAlertsPage.jsx</a></li>
       </ul>
     </td>
   </tr>
@@ -238,8 +238,8 @@ The system is organized into three role-based interfaces:
     <td style="border: 1px solid #999; padding: 8px;"><strong>Peak Season Prediction Module</strong></td>
     <td style="border: 1px solid #999; padding: 8px;">
       <ul>
-        <li><a href="src/subsystems/ai-feedback/PeakSeasonPredictionModule.jsx">src/subsystems/ai-feedback/PeakSeasonPredictionModule.jsx</a></li>
-        <li><a href="src/pages/staff/StaffPeakSeasonPage.jsx">src/pages/staff/StaffPeakSeasonPage.jsx</a></li>
+        <li><a href="src/subsystems/ai-feedback/PeakSeasonPredictionModule.jsx">PeakSeasonPredictionModule.jsx</a></li>
+        <li><a href="src/pages/staff/StaffPeakSeasonPage.jsx">StaffPeakSeasonPage.jsx</a></li>
       </ul>
     </td>
   </tr>
@@ -248,10 +248,10 @@ The system is organized into three role-based interfaces:
     <td style="border: 1px solid #999; padding: 8px;"><strong>AI Chatbot Assistance Module</strong></td>
     <td style="border: 1px solid #999; padding: 8px;">
       <ul>
-        <li><a href="src/subsystems/ai-feedback/AIChatbotManagementModule.jsx">src/subsystems/ai-feedback/AIChatbotManagementModule.jsx</a></li>
-        <li><a href="src/subsystems/ai-feedback/VisitorChatbotModule.jsx">src/subsystems/ai-feedback/VisitorChatbotModule.jsx</a></li>
-        <li><a href="src/pages/staff/StaffChatbotManagementPage.jsx">src/pages/staff/StaffChatbotManagementPage.jsx</a></li>
-        <li><a href="src/pages/visitor/VisitorChatbotPage.jsx">src/pages/visitor/VisitorChatbotPage.jsx</a></li>
+        <li><a href="src/subsystems/ai-feedback/AIChatbotManagementModule.jsx">AIChatbotManagementModule.jsx</a></li>
+        <li><a href="src/subsystems/ai-feedback/VisitorChatbotModule.jsx">VisitorChatbotModule.jsx</a></li>
+        <li><a href="src/pages/staff/StaffChatbotManagementPage.jsx">StaffChatbotManagementPage.jsx</a></li>
+        <li><a href="src/pages/visitor/VisitorChatbotPage.jsx">VisitorChatbotPage.jsx</a></li>
       </ul>
     </td>
   </tr>
@@ -260,10 +260,10 @@ The system is organized into three role-based interfaces:
     <td style="border: 1px solid #999; padding: 8px;"><strong>Feedback & Communication Module</strong></td>
     <td style="border: 1px solid #999; padding: 8px;">
       <ul>
-        <li><a href="src/subsystems/ai-feedback/FeedbackManagementModule.jsx">src/subsystems/ai-feedback/FeedbackManagementModule.jsx</a></li>
-        <li><a href="src/subsystems/ai-feedback/VisitorFeedbackModule.jsx">src/subsystems/ai-feedback/VisitorFeedbackModule.jsx</a></li>
-        <li><a href="src/pages/staff/StaffFeedbackManagementPage.jsx">src/pages/staff/StaffFeedbackManagementPage.jsx</a></li>
-        <li><a href="src/pages/visitor/VisitorFeedbackPage.jsx">src/pages/visitor/VisitorFeedbackPage.jsx</a></li>
+        <li><a href="src/subsystems/ai-feedback/FeedbackManagementModule.jsx">FeedbackManagementModule.jsx</a></li>
+        <li><a href="src/subsystems/ai-feedback/VisitorFeedbackModule.jsx">VisitorFeedbackModule.jsx</a></li>
+        <li><a href="src/pages/staff/StaffFeedbackManagementPage.jsx">StaffFeedbackManagementPage.jsx</a></li>
+        <li><a href="src/pages/visitor/VisitorFeedbackPage.jsx">VisitorFeedbackPage.jsx</a></li>
       </ul>
     </td>
   </tr>
