@@ -67,6 +67,7 @@ The system is organized into three role-based interfaces:
     <td style="border: 1px solid #999; padding: 8px;">
       <ul>
         <li><a href="src/subsystems/registration/VisitorRegistrationModule.jsx">VisitorRegistrationModule.jsx</a></li>
+        <li><a href="src/subsystems/registration/KioskRegistrationModule.jsx">KioskRegistrationModule.jsx</a></li>
         <li><a href="src/pages/visitor/VisitorRegistrationPage.jsx">VisitorRegistrationPage.jsx</a></li>
         <li><a href="src/pages/kiosk/KioskMonitorPage.jsx">KioskMonitorPage.jsx</a></li>
       </ul>
