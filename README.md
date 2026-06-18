@@ -29,8 +29,9 @@
 
 ## Project Management
 
-- **Trello:** [Trello Board Link Here]
+- **Trello:** https://trello.com/invite/b/69c6a7d708472a67d7740ac5/ATTI77cb867ede7a69e24c4acca0ed644d8a153BC0A5/progress-3
 - **GitHub:** https://github.com/yushan1101/ADP1-TamanBotani
+- **Previous GitHub with branch commit messages:** https://github.com/WONGZIQI0212/adp-ui-prototype.git
 
 ---
 
@@ -122,7 +123,7 @@ The system is organized into three role-based interfaces:
     <td style="border: 1px solid #999; padding: 8px;">
       <ul>
         <li><a href="src/subsystems/monitoring/MonitoringModule.jsx">MonitoringModule.jsx</a></li>
-        <li><a href="src/subsystems/monitoring/live-dashboard/LiveDashboard.jsx">/LiveDashboard.jsx</a></li>
+        <li><a href="src/subsystems/monitoring/live-dashboard/LiveDashboard.jsx">LiveDashboard.jsx</a></li>
         <li><a href="src/subsystems/monitoring/live-dashboard/LiveStats.jsx">LiveStats.jsx</a></li>
         <li><a href="src/subsystems/monitoring/live-dashboard/ActivityFeed.jsx">ActivityFeed.jsx</a></li>
         <li><a href="src/subsystems/monitoring/live-dashboard/AlertPanel.jsx">AlertPanel.jsx</a></li>
@@ -218,7 +219,7 @@ The system is organized into three role-based interfaces:
     <td style="border: 1px solid #999; padding: 8px;"><strong>Visitor Forecasting Module</strong></td>
     <td style="border: 1px solid #999; padding: 8px;">
       <ul>
-        <li><a href="src/subsystems/ai-feedback/VisitorForecastingModule.jsx">/VisitorForecastingModule.jsx</a></li>
+        <li><a href="src/subsystems/ai-feedback/VisitorForecastingModule.jsx">VisitorForecastingModule.jsx</a></li>
         <li><a href="src/pages/staff/StaffForecastingPage.jsx">StaffForecastingPage.jsx</a></li>
       </ul>
     </td>
