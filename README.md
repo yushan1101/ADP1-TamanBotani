@@ -275,10 +275,16 @@ The system is organized into three role-based interfaces:
 
 ## Run the Project
 
+Install dependencies:
+
 ```bash
-npm install
-npm run dev
+pnpm install
+```
+
+Start the development server:
+
+```bash
+pnpm run dev
 ```
 
 Open the application in your browser.
-```
