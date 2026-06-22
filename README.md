@@ -2,7 +2,7 @@
 
 **Course:** SCSE2243 – Application Development Project I, Semester II 2025/2026, Section 03  
 **Supervisor:** Dr. Alif Ridzuan bin Khairuddin  
-**Video Demo:** [YouTube Link Here]
+**Video Demo:** [[Click Here to View]](https://youtu.be/DxDzkY30g0I)
 
 ---
 
@@ -279,3 +279,12 @@ Install dependencies:
 
 ```bash
 pnpm install
+```
+
+Start the development server:
+
+```bash
+pnpm run dev
+```
+
+Open the application in your browser.
