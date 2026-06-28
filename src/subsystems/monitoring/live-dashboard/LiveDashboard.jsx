@@ -6,8 +6,8 @@ import { ActivityFeed } from "./ActivityFeed";
 export function LiveDashboard() {
   return (
     <div className="monitorDashboard">
-      <AlertPanel />
       <LiveStats />
+      <AlertPanel />
       <ActivityFeed />
     </div>
   );

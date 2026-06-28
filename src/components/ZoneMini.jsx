@@ -1,7 +1,7 @@
 import React from "react";
 export function ZoneMini({ zone }) {
   return (
-    <div className="zoneMini">
+    <div className={`zoneMini ${zone.level.toLowerCase()}`}>
       <div>
         <strong>{zone.name}</strong>
         <span>{zone.count} visitors</span>

@@ -1,7 +1,7 @@
 import React from "react";
 import {
   Activity, ArrowUpRight, BarChart3, Bell, Bot, CalendarDays,
-  FileText, Map, MessageSquare, Route, Search, Sparkles,
+  FileText, Map, MessageSquare, Route, Search, Users,
   TrendingDown, TrendingUp
 } from "lucide-react";
 import { MonitoringProviders } from "../../subsystems/monitoring/MonitoringProviders";
@@ -44,25 +44,45 @@ function OverviewContent({ appState, setPage }) {
 
   return (
     <>
-      <section className="monitorCommand">
-        <div className="monitorCommandIntro">
-          <span className="monitorLivePill"><Activity size={14} /> System healthy</span>
-          <h2>{timeGreeting()}, here's how the park is doing</h2>
-          <p>A live snapshot of attendance, crowd alerts, and visitor feedback across Taman Botani Johor, gathered in one place so nothing needs chasing across tabs.</p>
-          <div className="monitorCommandActions">
-            <button className="primaryButton" onClick={() => setPage("live")}>
-              <Activity size={17} /> Open Live Monitoring
-            </button>
-            <button className="ghostButton" onClick={() => setPage("reports")}>
-              <FileText size={17} /> View Reports
-            </button>
-          </div>
+      <section className="overviewCommand">
+        <div className="overviewHeroText">
+          <span className="monitorLivePill"><Activity size={14} /> Operations status: live</span>
+          <h2>{timeGreeting()}, Taman Botani Johor is operating normally.</h2>
+          <p>One-page management overview for visitor load, active alerts, feedback, and priority modules.</p>
         </div>
-        <div className="monitorCommandStats">
-          <SummaryTile label="Visitors today"  value={visitorsToday.toString()}        note={`${liveStats.visitors} inside right now`} tone="good" />
-          <SummaryTile label="Live occupancy"  value={`${liveStats.capacity}%`}        note="Of total park capacity" />
-          <SummaryTile label="Active alerts"   value={activeAlerts.length.toString()}  note={activeAlerts.length ? "Needs staff attention" : "All clear"} tone={activeAlerts.length ? "danger" : "good"} />
-          <SummaryTile label="New feedback"    value={newFeedback.length.toString()}   note={`${openCases.length} chatbot case${openCases.length === 1 ? "" : "s"} open`} />
+        <div className="overviewHeroActions">
+          <button className="primaryButton" onClick={() => setPage("live")}>
+            <Activity size={17} /> Open Live Monitoring
+          </button>
+          <button className="ghostButton" onClick={() => setPage("reports")}>
+            <FileText size={17} /> View Reports
+          </button>
+        </div>
+        <div className="overviewKpiStrip">
+          <div className="overviewKpiItem">
+            <Users size={17} />
+            <span>Today's visitors</span>
+            <strong>{visitorsToday}</strong>
+            <i>{analytics.trendSign}{analytics.trendPct}% vs yesterday</i>
+          </div>
+          <div className="overviewKpiItem">
+            <Activity size={17} />
+            <span>Live occupancy</span>
+            <strong>{liveStats.capacity}%</strong>
+            <i>{liveStats.visitors} inside now</i>
+          </div>
+          <button className={`overviewKpiItem clickable ${activeAlerts.length ? "danger" : ""}`} onClick={() => setPage("alerts")}>
+            <Bell size={17} />
+            <span>Active alerts</span>
+            <strong>{activeAlerts.length}</strong>
+            <i>{activeAlerts.length ? "Open alert page" : "All clear"}</i>
+          </button>
+          <button className="overviewKpiItem clickable" onClick={() => setPage("feedback")}>
+            <MessageSquare size={17} />
+            <span>Pending feedback</span>
+            <strong>{newFeedback.length}</strong>
+            <i>{openCases.length} chatbot case{openCases.length === 1 ? "" : "s"}</i>
+          </button>
         </div>
       </section>
 
@@ -132,10 +152,10 @@ function OverviewContent({ appState, setPage }) {
 
         <section className="panel">
           <div className="panelHeader">
-            <div><h2>AI Highlights</h2><p>Predictions and automated signals.</p></div>
+            <div><h2>Operational Signals</h2><p>Cross-system flags relevant to today's operations.</p></div>
           </div>
           <div className="statusStack">
-            <StatusItem icon={Sparkles} tone="good" title="Next peak expected this weekend" text={`Weekend staffing should plan for around ${analytics.weekendAvg} average visitors.`} />
+            <StatusItem icon={TrendingUp} tone="good" title="Next peak expected this weekend" text={`Weekend staffing should plan for around ${analytics.weekendAvg} average visitors.`} />
             <StatusItem icon={Bot} tone={openCases.length ? "warn" : "good"} title={`${openCases.length} chatbot case${openCases.length === 1 ? "" : "s"} open`} text="Lost items and visitor questions awaiting a reply." />
             <StatusItem icon={CalendarDays} tone={journey.anomalies ? "warn" : "good"} title={`Journey score ${journey.score}`} text={`${journey.anomalies} stay-duration review${journey.anomalies === 1 ? "" : "s"} flagged this week.`} />
           </div>

@@ -33,7 +33,7 @@ export function SearchBar({ onSelect, filters, setFilters }) {
   return (
     <div className="recordToolbar" ref={containerRef}>
       <div className="smartSearchBox">
-        <label>AI record search</label>
+        <label>Visitor record search</label>
         <div className="smartSearchInput">
           <Search size={17} />
           <input

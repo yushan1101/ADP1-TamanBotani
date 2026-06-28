@@ -29,7 +29,7 @@ export function VisitorDetail({ row }) {
       `Last seen: ${row[5]}`,
       `Contact: ${isGroup ? "Teacher: Cikgu Aminah" : "012-3456789"}`,
       `Group size: ${isGroup ? "32 students" : "1 visitor"}`,
-      `AI note: ${isGroup ? "Matches SMK keyword, education purpose, group record." : "No risk pattern detected."}`
+      `System flag: ${isGroup ? "Matches SMK keyword, education purpose, group record." : "No risk pattern detected."}`
     ];
     downloadTextFile(`visitor-record-${row[0]}.txt`, lines.join("\n"));
     notify(`Record for ${row[1]} downloaded to your device.`, { title: "Export record", tone: "good" });
@@ -48,7 +48,7 @@ export function VisitorDetail({ row }) {
         <div><span>Current zone</span><strong>{row[4]}</strong></div>
         <div><span>Last seen</span><strong>{row[5]}</strong></div>
         <div><span>Visit status</span><strong>{row[3]}</strong></div>
-        <div><span>AI note</span><strong>{isGroup ? "Matches SMK keyword, education purpose, group record." : "No risk pattern detected."}</strong></div>
+        <div><span>System flag</span><strong>{isGroup ? "Matches SMK keyword, education purpose, group record." : "No risk pattern detected."}</strong></div>
       </div>
       <div className="recordActionRow">
         <button className="primaryButton" onClick={() => setShowJourney((v) => !v)}>

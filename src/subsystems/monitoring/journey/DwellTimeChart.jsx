@@ -6,7 +6,7 @@ export function DwellTimeChart() {
   const { dwellDist } = system.journey;
 
   return (
-    <section className="panel spanThree">
+    <section className="panel spanTwo">
       <div className="panelHeader"><div><h2>Dwell Time Distribution</h2><p>Grouped by visitor duration segment.</p></div></div>
       <div className="dwellBars">
         {dwellDist.map(({ label, value }) => (

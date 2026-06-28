@@ -1,10 +1,18 @@
 import React from "react";
-export function SummaryTile({ label, value, note, tone }) {
+
+export function SummaryTile({ label, value, note, tone, trend, compare }) {
+  const isUp = trend && trend.startsWith("+");
+  const isDown = trend && trend.startsWith("-");
   return (
     <div className={`summaryTile ${tone || ""}`}>
-      <span>{label}</span>
+      <span className="summaryTileLabel">{label}</span>
       <strong>{value}</strong>
-      <i>{note}</i>
+      {trend && (
+        <span className={`summaryTileTrend ${isUp ? "trendUp" : isDown ? "trendDown" : ""}`}>
+          {trend}
+        </span>
+      )}
+      <i>{compare || note}</i>
     </div>
   );
 }

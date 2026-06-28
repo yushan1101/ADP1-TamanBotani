@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { CheckCircle2, Activity, AlertTriangle, RefreshCw } from "lucide-react";
-import { StatusItem } from "../../../components/StatusItem";
-import { ZoneMini } from "../../../components/ZoneMini";
+import { Activity, AlertTriangle, Bell, Download, MapPin, RefreshCw, Users } from "lucide-react";
 import { useMonitoring } from "../../../context/MonitoringContext";
 import { useToast } from "../../../components/ToastContext";
+import { downloadTextFile, rowsToCsv } from "../utils/download";
+
+const levelRank = { High: 3, Moderate: 2, Normal: 1 };
 
 export function LiveStats() {
   const { system, refreshAll } = useMonitoring();
@@ -21,46 +22,124 @@ export function LiveStats() {
     }, 900);
   }
 
-  const alertTone = liveStats.alerts >= 2 ? "danger" : "warn";
+  function handleExportSnapshot() {
+    const timestamp = new Date().toLocaleString();
+    const csv = rowsToCsv(
+      ["Metric", "Value", "Note"],
+      [
+        ["Visitors inside", liveStats.visitors.toString(), `${liveStats.capacity}% capacity`],
+        ["Peak zone", highestPressureZone?.name || "Main Gate", `${highestPressureZone?.fill || 0}% load`],
+        ["Open alerts", liveStats.alerts.toString(), "Crowd + long stay"],
+        ["Watch zones", criticalZones.length.toString(), "Moderate or high"],
+        ["Snapshot taken", timestamp, ""],
+      ]
+    );
+    downloadTextFile(`operations-snapshot-${Date.now()}.csv`, csv, "text/csv");
+    notify("Snapshot CSV downloaded to your device.", { title: "Export snapshot", tone: "good" });
+  }
+
+  const zoneStatusSorted = [...zones].sort((a, b) => {
+    const byLevel = (levelRank[b.level] || 0) - (levelRank[a.level] || 0);
+    return byLevel || b.fill - a.fill;
+  });
+  const highestPressureZone = zoneStatusSorted[0];
+  const criticalZones = zoneStatusSorted.filter(zone => zone.level !== "Normal");
+  const commandTone = liveStats.alerts >= 2 || highestPressureZone?.level === "High" ? "danger" : "warn";
+  const nextAction = `Send 1 officer to ${highestPressureZone?.name || "Main Gate"}`;
+  const secondaryAction = "Keep Herbarium route open";
+
+  function handleJumpToAlerts() {
+    document.getElementById("operational-alerts")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
 
   return (
-    <>
-      <section className="panel monitorHero spanTwo">
-        <div className="panelHeader">
-          <div>
-            <h2>Park Live Status</h2>
-            <p>Realtime system connected to monitoring engine. Auto-refreshes every 5 seconds.</p>
-          </div>
-          <button className="primaryButton" onClick={handleRefresh} disabled={refreshing}>
-            <RefreshCw size={17} className={refreshing ? "spinning" : ""} /> {refreshing ? "Refreshing…" : "Refresh Dashboard"}
-          </button>
+    <section className="panel operationsCommandPanel spanThree">
+      <div className="panelHeader operationsHeader">
+        <div>
+          <span className="monitorLivePill"><Activity size={14} /> Monitoring status: connected</span>
+          <h2>Today Operations</h2>
+          <p>{new Date().toLocaleTimeString("en-MY", { hour: "2-digit", minute: "2-digit" })} live status, next action, and zone pressure.</p>
         </div>
-        <div className="liveStatusGrid">
-          <div className="liveDial">
-            <strong>{liveStats.visitors}</strong>
-            <span>visitors inside</span>
-            <i>{liveStats.capacity}% capacity</i>
+        <div className="operationsHeaderActions">
+          <button className="primaryButton" onClick={handleRefresh} disabled={refreshing}>
+            <RefreshCw size={16} className={refreshing ? "spinning" : ""} /> {refreshing ? "Refreshing..." : "Refresh live feed"}
+          </button>
+          <button className="ghostButton" onClick={handleExportSnapshot}><Download size={16} /> Export snapshot</button>
+        </div>
+      </div>
+
+      <div className="controlSummaryGrid">
+        <div className="controlMetric primary">
+          <div className="metricTopLine">
+            <span className="metricIcon good"><Users size={17} /></span>
+            <span>Visitors inside</span>
           </div>
-          <div className="statusStack">
-            <StatusItem icon={CheckCircle2} title="Occupancy status: Moderate"  text="Park capacity threshold remains below alert level."                       tone="good" />
-            <StatusItem icon={Activity}     title="Live feed connected"          text="Entry, exit and checkpoint movement records are streaming normally."       tone="good" />
-            <StatusItem icon={AlertTriangle} title={`${liveStats.alerts} high-density highlight${liveStats.alerts !== 1 ? "s" : ""}`} text="Main Gate and Herbarium require staff attention." tone={alertTone} />
-            <div className="staffActionCard">
-              <strong>Recommended staff action</strong>
-              <span>Send one staff member to Main Gate queue lane and keep Herbarium route open.</span>
+          <div className="controlMetricMain">
+            <strong>{liveStats.visitors}</strong>
+            <i className="metricChip good">{liveStats.capacity}% capacity</i>
+          </div>
+        </div>
+        <button className={liveStats.alerts ? "controlMetric alert alertControlCard" : "controlMetric alertControlCard"} onClick={handleJumpToAlerts}>
+          <div className="metricTopLine">
+            <span className="metricIcon danger"><Bell size={17} /></span>
+            <span>Active Alerts</span>
+          </div>
+          <div className="controlMetricMain">
+            <strong>{liveStats.alerts}</strong>
+            <i className={liveStats.alerts ? "metricChip danger" : "metricChip good"}>{liveStats.alerts ? "Open queue" : "No action"}</i>
+          </div>
+        </button>
+        <div className="controlMetric">
+          <div className="metricTopLine">
+            <span className={`metricIcon ${highestPressureZone?.level === "High" ? "danger" : highestPressureZone?.level === "Moderate" ? "warn" : "good"}`}><MapPin size={17} /></span>
+            <span>Peak zone</span>
+          </div>
+          <div className="controlMetricMain">
+            <strong>{highestPressureZone?.name || "Main Gate"}</strong>
+            <i className={`metricChip ${highestPressureZone?.level === "High" ? "danger" : highestPressureZone?.level === "Moderate" ? "warn" : "good"}`}>{highestPressureZone?.fill || 0}% load</i>
+          </div>
+        </div>
+        <div className="controlMetric">
+          <div className="metricTopLine">
+            <span className={criticalZones.length ? "metricIcon warn" : "metricIcon good"}><AlertTriangle size={17} /></span>
+            <span>Watch zones</span>
+          </div>
+          <div className="controlMetricMain">
+            <strong>{criticalZones.length}</strong>
+            <i className={criticalZones.length ? "metricChip warn" : "metricChip good"}>Moderate or high</i>
+          </div>
+        </div>
+      </div>
+
+      <div className="controlWorkGrid">
+        <div className="controlActionPanel">
+          <div className="controlSectionLabel">Next action</div>
+          <div className="controlActionLine">
+            <AlertTriangle size={18} />
+            <div>
+              <strong>{nextAction}</strong>
+              <span>{secondaryAction}</span>
             </div>
           </div>
+          <div className="controlReason">
+            {highestPressureZone?.name || "Main Gate"} is currently the highest pressure area.
+          </div>
         </div>
-      </section>
 
-      <section className="panel">
-        <div className="panelHeader">
-          <div><h2>Current Occupancy</h2><p>Capacity status by area.</p></div>
+        <div className="controlZoneTable">
+          <div className="controlSectionLabel">Zone pressure</div>
+          <div className="zoneTableRows">
+            {zoneStatusSorted.map(zone => (
+              <div className={`zoneTableRow ${zone.level.toLowerCase()}`} key={zone.name}>
+                <strong>{zone.name}</strong>
+                <span>{zone.count} visitors</span>
+                <div className="zoneTableMeter"><i style={{ width: `${zone.fill}%` }} /></div>
+                <small>{zone.level}</small>
+              </div>
+            ))}
+          </div>
         </div>
-        <div className="compactZoneList">
-          {zones.map(zone => <ZoneMini key={zone.name} zone={zone} />)}
-        </div>
-      </section>
-    </>
+      </div>
+    </section>
   );
 }

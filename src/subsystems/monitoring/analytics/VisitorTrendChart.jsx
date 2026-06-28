@@ -60,7 +60,7 @@ export function VisitorTrendChart() {
       </div>
       <aside className="analyticsInsightRail">
         <div className="insightCard primary">
-          <span>Decision cue</span>
+          <span>Operational insight</span>
           <strong>Weekend staffing should be prepared for {weekendAvg} average visitors.</strong>
         </div>
       </aside>

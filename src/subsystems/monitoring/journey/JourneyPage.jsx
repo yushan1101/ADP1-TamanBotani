@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { ChevronRight } from "lucide-react";
 import { SummaryTile } from "../../../components/SummaryTile";
 import { RouteDiagram } from "./RouteDiagram";
 import { DropOffAnalysis } from "./DropOffAnalysis";
@@ -71,10 +72,20 @@ export function JourneyPage() {
       <section className="panel spanThree">
         <div className="panelHeader"><div><h2>Top Movement Paths</h2><p>Route sequences ranked by completion rate.</p></div></div>
         <div className="journeyPathGrid">
-          {data.routes.map(path => (
+          {data.routes.map((path, index) => (
             <div className="journeyPathCard" key={path.slice(0,4).join("-")}>
-              <div>{path.slice(0, 4).map(stop => <span key={stop}>{stop}</span>)}</div>
-              <strong>{path[4]}%</strong>
+              <div className="journeyPathCardTop">
+                <span>Route {index + 1}</span>
+                <strong>{path[4]}%</strong>
+              </div>
+              <div className="journeyPathSteps">
+                {path.slice(0, 4).map((stop, stopIndex) => (
+                  <React.Fragment key={stop}>
+                    <em>{stop}</em>
+                    {stopIndex < 3 && <ChevronRight size={12} />}
+                  </React.Fragment>
+                ))}
+              </div>
             </div>
           ))}
         </div>

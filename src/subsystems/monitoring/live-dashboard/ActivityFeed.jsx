@@ -6,9 +6,10 @@ export function ActivityFeed() {
   const feed = system.activityFeed;
 
   return (
-    <section className="panel spanThree">
-      <div className="panelHeader">
-        <div><h2>Live Activity Feed</h2><p>Latest check-ins, exits, and zone movements.</p></div>
+    <section className="panel auditFeedPanel spanThree">
+      <div className="panelHeader auditFeedHeader">
+        <div><h2>Movement Audit Log</h2><p>Latest verified entry, exit, and checkpoint records.</p></div>
+        <span>Auto-refreshes every 5 seconds</span>
       </div>
       <div className="activityTimeline">
         {feed.map(([time, text, type]) => (
