@@ -19,7 +19,7 @@ export function KioskApp({ appState, setAppState, onBack, initialPage = "qr" }) 
     logs: "Logs",
     faceGallery: "Face Capture Gallery"
   };
-  const props = { appState, setAppState };
+  const props = { appState, setAppState, setPage };
   const views = {
     qr: <KioskQRCheckInPage {...props} />,
     face: <KioskFaceIdCheckInPage {...props} />,

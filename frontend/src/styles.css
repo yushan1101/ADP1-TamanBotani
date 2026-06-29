@@ -5219,6 +5219,10 @@ textarea {
   background: #17251e;
 }
 
+.faceFeedGalleryButton {
+  margin-top: 12px;
+}
+
 button:disabled {
   cursor: not-allowed;
   opacity: 0.58;
