@@ -1,8 +1,0 @@
-import React from "react";
-import { Activity, AlertTriangle, BarChart3, Bot, CalendarDays, FileText, Home, LogOut, Map, MessageSquare, Route, Search, TrendingUp } from "lucide-react";
-const groups = [
-  ["Dashboard", [{id:"overview",label:"Dashboard Overview",icon:Home},{id:"live",label:"Live Monitoring",icon:Activity},{id:"analytics",label:"Visitor Analytics",icon:BarChart3},{id:"zones",label:"Zone & Crowd Monitoring",icon:Map},{id:"records",label:"Visitor Records",icon:Search},{id:"journey",label:"Journey & Experience",icon:Route},{id:"reports",label:"Reports",icon:FileText}]],
-  ["AI Management", [{id:"forecast",label:"Visitor Forecasting",icon:TrendingUp},{id:"alerts",label:"Peak Crowd Alerts",icon:AlertTriangle},{id:"season",label:"Peak Season Prediction",icon:CalendarDays}]],
-  ["Communication", [{id:"chatbot",label:"Chatbot Management",icon:Bot},{id:"feedback",label:"Feedback Management",icon:MessageSquare}]]
-];
-export function StaffDashboardLayout({ page, setPage, title, children, onBack }) { return <main className="dashboardShell"><aside className="staffSidebar"><div className="sidebarBrand"><strong>Taman Botani Johor</strong><span>Staff Dashboard</span></div>{groups.map(([g,items])=><div className="navGroup" key={g}><span>{g}</span>{items.map(i=><button key={i.id} className={page===i.id?"active":""} onClick={()=>setPage(i.id)}><i.icon size={18}/>{i.label}</button>)}</div>)}<button className="logout" onClick={onBack}><LogOut size={18}/> Choose Mode</button></aside><section className="dashboardMain"><header className="dashHeader"><div><p className="eyebrow">Staff / Manager Interface</p><h1>{title}</h1></div></header>{children}</section></main>; }
