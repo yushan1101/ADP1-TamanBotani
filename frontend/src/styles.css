@@ -5231,6 +5231,10 @@ textarea {
   margin-top: 12px;
 }
 
+.offlineFormButton {
+  margin-top: 14px;
+}
+
 button:disabled {
   cursor: not-allowed;
   opacity: 0.58;
