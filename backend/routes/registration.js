@@ -100,6 +100,15 @@ function badRequest(res, message) {
   return res.status(400).json({ error: message });
 }
 
+function parseImageDataUrl(imageData) {
+  const match = cleanText(imageData).match(/^data:(image\/[a-zA-Z0-9.+-]+);base64,(.+)$/);
+  if (!match) return null;
+  return {
+    mimeType: match[1],
+    bytes: Buffer.from(match[2], "base64")
+  };
+}
+
 function mapVisitorRow(row, createdAt) {
   return {
     id: row.id,
@@ -528,6 +537,73 @@ router.post("/face-enrollment", async (req, res) => {
     res.status(500).json({ error: "Failed to enroll Face ID" });
   } finally {
     conn.release();
+  }
+});
+
+// ─── GET /api/registration/face-enrollments ─────────────────
+// Demo-only feed for reviewing captured Face ID images.
+router.get("/face-enrollments", async (req, res) => {
+  const limit = Math.min(Math.max(Number(req.query.limit) || 20, 1), 50);
+
+  try {
+    const [rows] = await pool.execute(`
+      SELECT
+        fe.id,
+        fe.visitor_id AS visitorId,
+        COALESCE(v.name, 'Unknown visitor') AS visitorName,
+        fe.source,
+        fe.image_data AS imageData,
+        CHAR_LENGTH(fe.image_data) AS imageSize,
+        fe.confidence,
+        fe.status,
+        fe.enrolled_at AS enrolledAt
+      FROM face_enrollments fe
+      LEFT JOIN visitors v ON v.id = fe.visitor_id
+      ORDER BY fe.enrolled_at DESC
+      LIMIT ${limit}
+    `);
+
+    res.json({
+      count: rows.length,
+      enrollments: rows.map((row) => ({
+        id: row.id,
+        visitorId: row.visitorId,
+        visitorName: row.visitorName,
+        source: row.source,
+        imageData: row.imageData,
+        imageSize: Number(row.imageSize) || 0,
+        confidence: Number(row.confidence) || 0,
+        status: row.status,
+        enrolledAt: row.enrolledAt
+      }))
+    });
+  } catch (err) {
+    console.error("GET /registration/face-enrollments:", err.message);
+    res.status(500).json({ error: "Failed to load Face ID enrollments" });
+  }
+});
+
+// ─── GET /api/registration/face-enrollments/:id/image ────────
+// Demo-only direct image response for a single enrollment.
+router.get("/face-enrollments/:id/image", async (req, res) => {
+  try {
+    const [[row]] = await pool.execute(
+      "SELECT image_data FROM face_enrollments WHERE id = ?",
+      [cleanText(req.params.id)]
+    );
+    if (!row) {
+      return res.status(404).json({ error: "Face ID enrollment not found" });
+    }
+
+    const image = parseImageDataUrl(row.image_data);
+    if (!image) {
+      return res.status(422).json({ error: "Stored image data is invalid" });
+    }
+
+    res.type(image.mimeType).send(image.bytes);
+  } catch (err) {
+    console.error("GET /registration/face-enrollments/:id/image:", err.message);
+    res.status(500).json({ error: "Failed to load Face ID image" });
   }
 });
 

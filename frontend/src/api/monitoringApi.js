@@ -90,6 +90,7 @@ export const registerVisitor = (body)      => post("/registration/visitor", body
 export const registerKioskVisitor = (body) => post("/registration/kiosk", body, false);
 export const enrollFaceId = (body)         => post("/registration/face-enrollment", body, false);
 export const fetchKioskRegistrationRecords = () => get("/registration/kiosk-records");
+export const fetchFaceEnrollments = (limit = 20) => get("/registration/face-enrollments", { limit });
 
 // ─── Reports ──────────────────────────────────────────────────
 export const fetchReports    = ()     => get("/reports");
