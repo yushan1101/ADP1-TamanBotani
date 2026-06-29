@@ -13,6 +13,12 @@ Open MySQL and run the schema:
 mysql -u root -p < db/schema.sql
 ```
 
+For an existing database that already has the older monitoring schema, run:
+
+```bash
+mysql -u root -p < db/migrations/001_registration.sql
+```
+
 ---
 
 ## 2. Environment file
@@ -102,6 +108,13 @@ VITE_API_URL=http://localhost:3001/api
 |--------|---------------------|---------------------------------|--------------------------|
 | GET    | `/api/visitors`     | `type`, `date`, `purpose`, `search` | Visitor records list |
 | GET    | `/api/visitors/:id` | —                               | Single visitor detail    |
+
+### Registration
+| Method | Route                                | Description                                  |
+|--------|--------------------------------------|----------------------------------------------|
+| POST   | `/api/registration/visitor`          | Register individual/group visitor and issue QR pass |
+| POST   | `/api/registration/kiosk`            | Register no-phone kiosk visitor and Face ID check-in |
+| GET    | `/api/registration/kiosk-records`    | Latest kiosk Face ID registration feed       |
 
 ### Reports
 | Method | Route                    | Description             |

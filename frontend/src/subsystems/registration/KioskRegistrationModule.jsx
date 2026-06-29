@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Camera, CheckCircle2, ScanFace } from "lucide-react";
+import { registerKioskVisitor } from "../../api/monitoringApi";
 import { nextId, nowStamp } from "../../data/appState";
 
 const emptyForm = {
@@ -19,6 +20,7 @@ export function KioskRegistrationModule({ appState, setAppState }) {
   const [step, setStep] = useState("consent");
   const [form, setForm] = useState(emptyForm);
   const [message, setMessage] = useState("Waiting for visitor consent.");
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     if (videoRef.current && streamRef.current) videoRef.current.srcObject = streamRef.current;
@@ -46,7 +48,28 @@ export function KioskRegistrationModule({ appState, setAppState }) {
     }
   };
 
-  const captureAndRegister = () => {
+  const captureAndRegister = async () => {
+    setSubmitting(true);
+
+    try {
+      const result = await registerKioskVisitor({ ...form, privacyConsent: true });
+      setAppState((current) => ({
+        ...current,
+        visitors: [result.visitor, ...current.visitors],
+        visits: [result.visit, ...current.visits],
+        kioskRecords: [result.record, ...current.kioskRecords],
+        logs: [result.log, ...current.logs].slice(0, 20)
+      }));
+      streamRef.current?.getTracks().forEach((track) => track.stop());
+      setStep("success");
+      setMessage("Registration saved to database. Face ID enrolled and entry recorded.");
+      return;
+    } catch (error) {
+      console.warn("Kiosk registration API unavailable, using local demo state.", error);
+    } finally {
+      setSubmitting(false);
+    }
+
     const visitorId = nextId("V");
     const visitId = nextId("VISIT");
     const kioskId = nextId("KIOSK");
@@ -142,7 +165,7 @@ export function KioskRegistrationModule({ appState, setAppState }) {
             <strong>Please look directly at the camera</strong>
             <span>Blink slowly to complete liveness check.</span>
           </div>
-          <button className="primaryButton wideKioskButton" onClick={captureAndRegister}><CheckCircle2 size={17} /> Capture & Register</button>
+          <button className="primaryButton wideKioskButton" onClick={captureAndRegister} disabled={submitting}><CheckCircle2 size={17} /> {submitting ? "Saving..." : "Capture & Register"}</button>
         </div>
       )}
 

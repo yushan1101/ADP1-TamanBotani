@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { CheckCircle2, QrCode, UserRoundPlus, Users } from "lucide-react";
+import { registerVisitor } from "../../api/monitoringApi";
 import { nextHash, nextId, nowStamp } from "../../data/appState";
 
 const purposeOptions = [
@@ -31,10 +32,11 @@ export function VisitorRegistrationModule({ appState, setAppState, compact = fal
   });
   const [agreed, setAgreed] = useState(false);
   const [message, setMessage] = useState("Complete the form to generate a QR pass.");
+  const [submitting, setSubmitting] = useState(false);
 
   const update = (key, value) => setForm((current) => ({ ...current, [key]: value }));
 
-  const submit = () => {
+  const submit = async () => {
     const age = Number(form.age);
     if (!form.name || !form.phone || !form.age || !agreed) {
       setMessage("Please complete name, phone, age and privacy consent.");
@@ -47,6 +49,30 @@ export function VisitorRegistrationModule({ appState, setAppState, compact = fal
     if (form.visitType === "Group" && (!form.organisation || !form.visitDate || !form.participantCount || !form.ageRange)) {
       setMessage("Please complete organisation, visit date, total participants and age range for group visit.");
       return;
+    }
+
+    setSubmitting(true);
+
+    try {
+      const result = await registerVisitor({
+        ...form,
+        age,
+        participantCount: Number(form.participantCount) || 1,
+        privacyConsent: agreed
+      });
+      setAppState((current) => ({
+        ...current,
+        visitors: [result.visitor, ...current.visitors],
+        groups: result.group ? [result.group, ...current.groups] : current.groups,
+        passes: [result.pass, ...current.passes],
+        logs: [result.log, ...current.logs].slice(0, 20)
+      }));
+      setMessage(`Registration saved to database. ${result.pass.type} QR ${result.pass.id} generated with security hash ${result.pass.hash}.`);
+      return;
+    } catch (error) {
+      console.warn("Registration API unavailable, using local demo state.", error);
+    } finally {
+      setSubmitting(false);
     }
 
     const visitorId = nextId("V");
@@ -161,7 +187,7 @@ export function VisitorRegistrationModule({ appState, setAppState, compact = fal
       <label className="checkLine">
         <input type="checkbox" checked={agreed} onChange={(event) => setAgreed(event.target.checked)} /> I agree to the privacy notice.
       </label>
-      <button className="primaryButton" onClick={submit}>{form.visitType === "Group" ? <Users size={18} /> : <QrCode size={18} />} Submit & Generate QR</button>
+      <button className="primaryButton" onClick={submit} disabled={submitting}>{form.visitType === "Group" ? <Users size={18} /> : <QrCode size={18} />} {submitting ? "Saving..." : "Submit & Generate QR"}</button>
       <div className="notice"><CheckCircle2 size={18} />{message}</div>
     </section>
   );
