@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Camera, CheckCircle2, ScanFace } from "lucide-react";
+import { registerKioskVisitor } from "../../api/monitoringApi";
 import { nextId, nowStamp } from "../../data/appState";
+import { captureFaceSnapshot, createDemoFacePayload, FACE_LIVENESS_STEPS } from "./faceIdUtils";
 
 const emptyForm = {
   name: "",
@@ -19,6 +21,11 @@ export function KioskRegistrationModule({ appState, setAppState }) {
   const [step, setStep] = useState("consent");
   const [form, setForm] = useState(emptyForm);
   const [message, setMessage] = useState("Waiting for visitor consent.");
+  const [submitting, setSubmitting] = useState(false);
+  const [stepIndex, setStepIndex] = useState(0);
+
+  const challengeComplete = stepIndex >= FACE_LIVENESS_STEPS.length;
+  const activeStep = FACE_LIVENESS_STEPS[Math.min(stepIndex, FACE_LIVENESS_STEPS.length - 1)];
 
   useEffect(() => {
     if (videoRef.current && streamRef.current) videoRef.current.srcObject = streamRef.current;
@@ -34,6 +41,7 @@ export function KioskRegistrationModule({ appState, setAppState }) {
     }
     setStep("capture");
     setMessage("Face camera active. Ask visitor to look directly at the camera.");
+    setStepIndex(0);
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
         video: { facingMode: "user" },
@@ -46,7 +54,42 @@ export function KioskRegistrationModule({ appState, setAppState }) {
     }
   };
 
-  const captureAndRegister = () => {
+  const confirmStep = () => {
+    setStepIndex((current) => Math.min(current + 1, FACE_LIVENESS_STEPS.length));
+  };
+
+  const captureAndRegister = async () => {
+    const imageData = captureFaceSnapshot(videoRef.current);
+    if (!imageData || !challengeComplete) {
+      setMessage("Complete the blink-and-turn liveness check before registering Face ID.");
+      return;
+    }
+
+    setSubmitting(true);
+
+    try {
+      const result = await registerKioskVisitor({
+        ...form,
+        ...createDemoFacePayload({ source: "Kiosk", imageData }),
+        privacyConsent: true
+      });
+      setAppState((current) => ({
+        ...current,
+        visitors: [result.visitor, ...current.visitors],
+        visits: [result.visit, ...current.visits],
+        kioskRecords: [result.record, ...current.kioskRecords],
+        logs: [result.log, ...current.logs].slice(0, 20)
+      }));
+      streamRef.current?.getTracks().forEach((track) => track.stop());
+      setStep("success");
+      setMessage("Registration saved to database. Face ID enrolled and entry recorded.");
+      return;
+    } catch (error) {
+      console.warn("Kiosk registration API unavailable, using local demo state.", error);
+    } finally {
+      setSubmitting(false);
+    }
+
     const visitorId = nextId("V");
     const visitId = nextId("VISIT");
     const kioskId = nextId("KIOSK");
@@ -61,6 +104,7 @@ export function KioskRegistrationModule({ appState, setAppState }) {
       purpose: form.purpose,
       activity: form.activity,
       faceId: true,
+      faceImage: imageData,
       status: "active",
       noPhoneVisitor: true,
       createdAt: nowStamp()
@@ -140,9 +184,22 @@ export function KioskRegistrationModule({ appState, setAppState }) {
               <div className="faceGuide"><ScanFace size={54} /></div>
             </div>
             <strong>Please look directly at the camera</strong>
-            <span>Blink slowly to complete liveness check.</span>
+            <span>Complete the blink-and-turn liveness check before registering.</span>
           </div>
-          <button className="primaryButton wideKioskButton" onClick={captureAndRegister}><CheckCircle2 size={17} /> Capture & Register</button>
+          <div className="faceLivenessPanel kioskFaceLiveness">
+            <div className="faceActionPrompt">
+              <span>{challengeComplete ? "Liveness complete" : `Step ${stepIndex + 1} of ${FACE_LIVENESS_STEPS.length}`}</span>
+              <strong>{challengeComplete ? "Ready to register" : activeStep.label}</strong>
+              {!challengeComplete && <em>{activeStep.instruction}</em>}
+            </div>
+            <div className="faceActionDots">
+              {FACE_LIVENESS_STEPS.map((step, index) => (
+                <i key={step.id} className={index < stepIndex ? "done" : ""} />
+              ))}
+            </div>
+            {!challengeComplete && <button className="secondaryButton" onClick={confirmStep}>Confirm Step</button>}
+          </div>
+          <button className="primaryButton wideKioskButton" onClick={captureAndRegister} disabled={!challengeComplete || submitting}><CheckCircle2 size={17} /> {submitting ? "Saving..." : "Capture & Register"}</button>
         </div>
       )}
 

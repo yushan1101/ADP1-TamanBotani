@@ -18,6 +18,7 @@ function App() {
   if (mode === "visitor") return <VisitorApp appState={appState} setAppState={setAppState} onBack={() => setMode("select")} />;
   if (mode === "staff") return <StaffApp appState={appState} setAppState={setAppState} onBack={() => setMode("select")} />;
   if (mode === "kiosk") return <KioskApp appState={appState} setAppState={setAppState} onBack={() => setMode("select")} />;
+  if (mode === "kioskMonitor") return <KioskApp appState={appState} setAppState={setAppState} onBack={() => setMode("select")} initialPage="monitor" />;
   return <ModeSelectionPage onSelectMode={setMode} />;
 }
 

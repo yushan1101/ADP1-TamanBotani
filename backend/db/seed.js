@@ -424,7 +424,7 @@ async function seed() {
   try {
     console.log("🗑  Clearing old data…");
     await conn.execute("SET FOREIGN_KEY_CHECKS=0");
-    for (const t of ["activity_log","alerts","visits","visitors","zones","reports"]) {
+    for (const t of ["kiosk_registration_records","face_enrollments","activity_log","alerts","visits","qr_passes","visitors","zones","reports"]) {
       await conn.execute(`TRUNCATE TABLE ${t}`);
     }
     await conn.execute("SET FOREIGN_KEY_CHECKS=1");

@@ -85,6 +85,13 @@ export const fetchAnalytics = (filters) => get("/analytics", filters);
 export const fetchVisitors    = (filters) => get("/visitors", filters);
 export const fetchVisitorById = (id)      => get(`/visitors/${id}`);
 
+// ─── Registration (public visitor/kiosk flow) ────────────────
+export const registerVisitor = (body)      => post("/registration/visitor", body, false);
+export const registerKioskVisitor = (body) => post("/registration/kiosk", body, false);
+export const enrollFaceId = (body)         => post("/registration/face-enrollment", body, false);
+export const fetchKioskRegistrationRecords = () => get("/registration/kiosk-records");
+export const fetchFaceEnrollments = (limit = 20) => get("/registration/face-enrollments", { limit });
+
 // ─── Reports ──────────────────────────────────────────────────
 export const fetchReports    = ()     => get("/reports");
 export const generateReport  = (body) => post("/reports/generate", body);
