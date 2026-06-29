@@ -76,3 +76,21 @@ CREATE TABLE IF NOT EXISTS reports (
   status       ENUM('Ready','Generating','Failed') DEFAULT 'Ready',
   generated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
+
+-- ─── Visitor Feedback (Subsystem 3: AI Prediction & Smart Management) ──
+CREATE TABLE IF NOT EXISTS visitor_feedback (
+  feedback_id        VARCHAR(20) PRIMARY KEY,
+  visitor_name       VARCHAR(100) NOT NULL DEFAULT 'Anonymous Visitor',
+  rating             INT NOT NULL,
+  category           VARCHAR(50) NOT NULL,
+  feedback_text      TEXT NOT NULL,
+  is_anonymous       BOOLEAN NOT NULL DEFAULT FALSE,
+  status             ENUM('New','Reviewed','Responded') NOT NULL DEFAULT 'New',
+  sentiment_label    ENUM('Positive','Neutral','Negative') NOT NULL DEFAULT 'Neutral',
+  sentiment_score    DECIMAL(4,2) NOT NULL DEFAULT 0.00,
+  keywords_extracted JSON,
+  staff_response     TEXT,
+  responded_by       VARCHAR(100),
+  responded_at       DATETIME,
+  submitted_at       DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);

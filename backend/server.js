@@ -9,6 +9,7 @@ const analyticsRoutes    = require("./routes/analytics");
 const visitorsRoutes     = require("./routes/visitors");
 const reportsRoutes      = require("./routes/reports");
 const overviewRoutes     = require("./routes/overview");
+const feedbackRoutes     = require("./routes/feedback");
 
 const app  = express();
 const PORT = process.env.PORT || 3001;
@@ -28,6 +29,7 @@ app.get("/api/health", (req, res) => {
 
 // ─── Auth routes (public — no requireAuth) ────────────────────
 app.use("/api/auth", authRoutes);
+app.use("/api/feedback", feedbackRoutes);
 
 // ─── Protected routes (require valid staff token) ─────────────
 app.use("/api/monitoring", requireAuth, monitoringRoutes);
