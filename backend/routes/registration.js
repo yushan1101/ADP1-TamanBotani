@@ -85,6 +85,17 @@ async function createUniqueHash(conn) {
   throw new Error("Could not allocate QR security hash");
 }
 
+async function getEntryZoneId(conn) {
+  const [[zone]] = await conn.execute("SELECT id FROM zones ORDER BY id LIMIT 1");
+  if (zone) return zone.id;
+
+  const [result] = await conn.execute(
+    "INSERT INTO zones (name, capacity) VALUES (?, ?)",
+    ["Main Gate", 500]
+  );
+  return result.insertId;
+}
+
 function badRequest(res, message) {
   return res.status(400).json({ error: message });
 }
@@ -359,6 +370,7 @@ router.post("/kiosk", async (req, res) => {
     const kioskId = await createUniqueId(conn, "kiosk_registration_records", "KIOSK");
     const purpose = normalizePurpose(body.purpose);
     const activity = normalizeActivity(body.activity);
+    const entryZoneId = await getEntryZoneId(conn);
 
     await conn.execute(
       `INSERT INTO visitors
@@ -395,7 +407,7 @@ router.post("/kiosk", async (req, res) => {
       `INSERT INTO visits
        (id,visitor_id,check_in_time,check_out_time,status,entry_method,current_zone_id,tag)
        VALUES (?,?,?,?,?,?,?,?)`,
-      [visitId, visitorId, createdAt, null, "inside", "Face ID", 1, "No-phone visitor"]
+      [visitId, visitorId, createdAt, null, "inside", "Face ID", entryZoneId, "No-phone visitor"]
     );
 
     await conn.execute(
