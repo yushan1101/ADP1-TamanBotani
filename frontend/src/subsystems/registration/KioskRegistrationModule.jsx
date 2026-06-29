@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Camera, CheckCircle2, ScanFace } from "lucide-react";
 import { registerKioskVisitor } from "../../api/monitoringApi";
 import { nextId, nowStamp } from "../../data/appState";
+import { captureFaceSnapshot, createDemoFacePayload, FACE_LIVENESS_COLORS } from "./faceIdUtils";
 
 const emptyForm = {
   name: "",
@@ -21,6 +22,10 @@ export function KioskRegistrationModule({ appState, setAppState }) {
   const [form, setForm] = useState(emptyForm);
   const [message, setMessage] = useState("Waiting for visitor consent.");
   const [submitting, setSubmitting] = useState(false);
+  const [colorIndex, setColorIndex] = useState(0);
+
+  const challengeComplete = colorIndex >= FACE_LIVENESS_COLORS.length;
+  const activeColor = FACE_LIVENESS_COLORS[Math.min(colorIndex, FACE_LIVENESS_COLORS.length - 1)];
 
   useEffect(() => {
     if (videoRef.current && streamRef.current) videoRef.current.srcObject = streamRef.current;
@@ -36,6 +41,7 @@ export function KioskRegistrationModule({ appState, setAppState }) {
     }
     setStep("capture");
     setMessage("Face camera active. Ask visitor to look directly at the camera.");
+    setColorIndex(0);
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
         video: { facingMode: "user" },
@@ -48,11 +54,25 @@ export function KioskRegistrationModule({ appState, setAppState }) {
     }
   };
 
+  const confirmColor = () => {
+    setColorIndex((current) => Math.min(current + 1, FACE_LIVENESS_COLORS.length));
+  };
+
   const captureAndRegister = async () => {
+    const imageData = captureFaceSnapshot(videoRef.current);
+    if (!imageData || !challengeComplete) {
+      setMessage("Complete the 8-colour liveness check before registering Face ID.");
+      return;
+    }
+
     setSubmitting(true);
 
     try {
-      const result = await registerKioskVisitor({ ...form, privacyConsent: true });
+      const result = await registerKioskVisitor({
+        ...form,
+        ...createDemoFacePayload({ source: "Kiosk", imageData }),
+        privacyConsent: true
+      });
       setAppState((current) => ({
         ...current,
         visitors: [result.visitor, ...current.visitors],
@@ -84,6 +104,7 @@ export function KioskRegistrationModule({ appState, setAppState }) {
       purpose: form.purpose,
       activity: form.activity,
       faceId: true,
+      faceImage: imageData,
       status: "active",
       noPhoneVisitor: true,
       createdAt: nowStamp()
@@ -163,9 +184,21 @@ export function KioskRegistrationModule({ appState, setAppState }) {
               <div className="faceGuide"><ScanFace size={54} /></div>
             </div>
             <strong>Please look directly at the camera</strong>
-            <span>Blink slowly to complete liveness check.</span>
+            <span>Complete the 8-colour liveness check before registering.</span>
           </div>
-          <button className="primaryButton wideKioskButton" onClick={captureAndRegister} disabled={submitting}><CheckCircle2 size={17} /> {submitting ? "Saving..." : "Capture & Register"}</button>
+          <div className="faceLivenessPanel kioskFaceLiveness">
+            <div className="faceColorPrompt" style={{ "--challenge-color": activeColor.hex }}>
+              <span>{challengeComplete ? "Liveness complete" : `Step ${colorIndex + 1} of ${FACE_LIVENESS_COLORS.length}`}</span>
+              <strong>{challengeComplete ? "Ready to register" : activeColor.name}</strong>
+            </div>
+            <div className="faceColorDots">
+              {FACE_LIVENESS_COLORS.map((color, index) => (
+                <i key={color.name} className={index < colorIndex ? "done" : ""} style={{ backgroundColor: color.hex }} />
+              ))}
+            </div>
+            {!challengeComplete && <button className="secondaryButton" onClick={confirmColor}>Confirm Colour</button>}
+          </div>
+          <button className="primaryButton wideKioskButton" onClick={captureAndRegister} disabled={!challengeComplete || submitting}><CheckCircle2 size={17} /> {submitting ? "Saving..." : "Capture & Register"}</button>
         </div>
       )}
 

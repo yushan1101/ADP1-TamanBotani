@@ -107,6 +107,67 @@ function mapVisitorRow(row, createdAt) {
   };
 }
 
+function normalizeFacePayload(body) {
+  const imageData = cleanText(body.faceImageData);
+  const liveness = body.liveness && typeof body.liveness === "object" ? body.liveness : {};
+  const colorSequence = Array.isArray(liveness.colorSequence) ? liveness.colorSequence : [];
+  const embedding = Array.isArray(body.embedding) ? body.embedding : [];
+
+  if (!imageData || !imageData.startsWith("data:image/")) {
+    return null;
+  }
+  if (imageData.length > 750000) {
+    return null;
+  }
+  if (liveness.passed !== true || colorSequence.length < 8) {
+    return null;
+  }
+
+  return {
+    imageData,
+    embeddingJson: JSON.stringify(embedding),
+    livenessJson: JSON.stringify(liveness),
+    colorSequence: colorSequence.join(", "),
+    confidence: Number(body.confidence) || 0.96
+  };
+}
+
+async function saveFaceEnrollment(conn, visitorId, source, body, enrolledAt) {
+  const payload = normalizeFacePayload(body);
+  if (!payload) return null;
+
+  const faceId = await createUniqueId(conn, "face_enrollments", "FACE");
+  await conn.execute(
+    `INSERT INTO face_enrollments
+     (id,visitor_id,source,image_data,embedding_json,liveness_json,color_sequence,confidence,status,enrolled_at)
+     VALUES (?,?,?,?,?,?,?,?,?,?)`,
+    [
+      faceId,
+      visitorId,
+      source,
+      payload.imageData,
+      payload.embeddingJson,
+      payload.livenessJson,
+      payload.colorSequence,
+      payload.confidence,
+      "active",
+      enrolledAt
+    ]
+  );
+
+  await conn.execute("UPDATE visitors SET face_id = 1 WHERE id = ?", [visitorId]);
+
+  return {
+    id: faceId,
+    visitorId,
+    source,
+    status: "active",
+    confidence: payload.confidence,
+    colorSequence: payload.colorSequence,
+    enrolledAt
+  };
+}
+
 // ─── POST /api/registration/visitor ──────────────────────────
 // Creates an individual or group visitor registration and issues a QR pass.
 router.post("/visitor", async (req, res) => {
@@ -324,6 +385,12 @@ router.post("/kiosk", async (req, res) => {
       ]
     );
 
+    const faceEnrollment = await saveFaceEnrollment(conn, visitorId, "Kiosk", body, createdAt);
+    if (!faceEnrollment) {
+      await conn.rollback();
+      return badRequest(res, "Face image and completed 8-colour liveness check are required.");
+    }
+
     await conn.execute(
       `INSERT INTO visits
        (id,visitor_id,check_in_time,check_out_time,status,entry_method,current_zone_id,tag)
@@ -381,12 +448,72 @@ router.post("/kiosk", async (req, res) => {
         status: "Face ID enrolled and entry recorded",
         time: createdAt
       },
+      faceEnrollment,
       log: `${createdAt} - No-phone visitor ${name} enrolled Face ID at kiosk; no QR generated.`
     });
   } catch (err) {
     await conn.rollback();
     console.error("POST /registration/kiosk:", err.message);
     res.status(500).json({ error: "Failed to register kiosk visitor" });
+  } finally {
+    conn.release();
+  }
+});
+
+// ─── POST /api/registration/face-enrollment ──────────────────
+// Enrolls Face ID for an existing visitor/pass from the mobile app.
+router.post("/face-enrollment", async (req, res) => {
+  const body = req.body || {};
+  const visitorIdFromBody = cleanText(body.visitorId);
+  const passId = cleanText(body.passId);
+  const agreed = body.privacyConsent === true || body.agreed === true;
+
+  if (!agreed) {
+    return badRequest(res, "Biometric consent is required.");
+  }
+
+  const conn = await pool.getConnection();
+  const enrolledAt = sqlDateTime();
+
+  try {
+    let visitorId = visitorIdFromBody;
+    if (!visitorId && passId) {
+      const [[pass]] = await conn.execute("SELECT visitor_id FROM qr_passes WHERE id = ?", [passId]);
+      visitorId = pass?.visitor_id;
+    }
+
+    if (!visitorId) {
+      return badRequest(res, "Visitor ID or QR pass ID is required.");
+    }
+
+    const [[visitor]] = await conn.execute("SELECT id, name FROM visitors WHERE id = ?", [visitorId]);
+    if (!visitor) {
+      return res.status(404).json({ error: "Visitor not found" });
+    }
+
+    await conn.beginTransaction();
+    const faceEnrollment = await saveFaceEnrollment(conn, visitorId, "Visitor App", body, enrolledAt);
+    if (!faceEnrollment) {
+      await conn.rollback();
+      return badRequest(res, "Face image and completed 8-colour liveness check are required.");
+    }
+
+    await conn.execute(
+      "INSERT INTO activity_log (event_time,event_text,event_type) VALUES (?,?,?)",
+      [enrolledAt, `Face ID enrolled for ${visitor.name} from visitor mobile app`, "Registration"]
+    );
+
+    await conn.commit();
+
+    res.status(201).json({
+      faceEnrollment,
+      visitor: { id: visitorId, name: visitor.name, faceId: true },
+      log: `${enrolledAt} - Face ID enrolled for ${visitor.name} from visitor mobile app.`
+    });
+  } catch (err) {
+    await conn.rollback();
+    console.error("POST /registration/face-enrollment:", err.message);
+    res.status(500).json({ error: "Failed to enroll Face ID" });
   } finally {
     conn.release();
   }

@@ -35,8 +35,11 @@ DB_PORT=3306
 DB_USER=root
 DB_PASSWORD=your_password
 DB_NAME=taman_botani
+DB_SSL=false
 PORT=3001
 ```
+
+For cloud MySQL/TiDB providers that require TLS, set `DB_SSL=true`.
 
 ---
 
@@ -114,6 +117,7 @@ VITE_API_URL=http://localhost:3001/api
 |--------|--------------------------------------|----------------------------------------------|
 | POST   | `/api/registration/visitor`          | Register individual/group visitor and issue QR pass |
 | POST   | `/api/registration/kiosk`            | Register no-phone kiosk visitor and Face ID check-in |
+| POST   | `/api/registration/face-enrollment`  | Save mobile Face ID snapshot, demo embedding and liveness check |
 | GET    | `/api/registration/kiosk-records`    | Latest kiosk Face ID registration feed       |
 
 ### Reports

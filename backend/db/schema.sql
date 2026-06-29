@@ -55,6 +55,21 @@ CREATE TABLE IF NOT EXISTS qr_passes (
   FOREIGN KEY (visitor_id) REFERENCES visitors(id)
 );
 
+-- ─── Face ID Enrollments ─────────────────────────────────────
+CREATE TABLE IF NOT EXISTS face_enrollments (
+  id              VARCHAR(24) PRIMARY KEY,
+  visitor_id      VARCHAR(20) NOT NULL,
+  source          ENUM('Visitor App','Kiosk') DEFAULT 'Visitor App',
+  image_data      LONGTEXT,
+  embedding_json  TEXT,
+  liveness_json   TEXT,
+  color_sequence  VARCHAR(255),
+  confidence      DECIMAL(5,2) DEFAULT 0.96,
+  status          ENUM('active','revoked') DEFAULT 'active',
+  enrolled_at     DATETIME DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (visitor_id) REFERENCES visitors(id)
+);
+
 -- ─── Visits ──────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS visits (
   id               VARCHAR(20) PRIMARY KEY,

@@ -5034,3 +5034,79 @@ textarea {
   align-items: center;
   gap: 8px;
 }
+
+/* ─── Face ID liveness demo ───────────────────────────────── */
+.modeGrid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.faceLivenessPanel {
+  display: grid;
+  gap: 10px;
+  border: 1px solid #dce6df;
+  border-radius: 12px;
+  padding: 12px;
+  background: #fbfdfc;
+}
+
+.faceColorPrompt {
+  display: grid;
+  place-items: center;
+  gap: 5px;
+  min-height: 92px;
+  border: 4px solid var(--challenge-color);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--challenge-color) 12%, #ffffff);
+  color: #102016;
+}
+
+.faceColorPrompt span {
+  color: #52685b;
+  font-size: 12px;
+  font-weight: 850;
+  text-transform: uppercase;
+}
+
+.faceColorPrompt strong {
+  font-size: 24px;
+}
+
+.faceColorDots {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.faceColorDots i {
+  display: block;
+  height: 18px;
+  border: 2px solid rgba(16, 32, 22, 0.16);
+  border-radius: 999px;
+  opacity: 0.35;
+}
+
+.faceColorDots i.done {
+  border-color: #173729;
+  opacity: 1;
+}
+
+.kioskFaceLiveness {
+  margin: 14px 0;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.58;
+}
+
+@media (max-width: 1050px) {
+  .modeGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .modeGrid {
+    grid-template-columns: 1fr;
+  }
+}
