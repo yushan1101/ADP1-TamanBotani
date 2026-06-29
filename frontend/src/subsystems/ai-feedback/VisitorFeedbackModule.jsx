@@ -14,6 +14,7 @@ import {
   Sparkles,
   RotateCcw,
 } from "lucide-react";
+import { submitFeedback as submitFeedbackRecord } from "../../api/feedbackApi";
 import "./AiFeedback.css";
 
 const FEEDBACK_CATEGORIES = [
@@ -135,16 +136,14 @@ function extractKeywords(text, category) {
   return [...new Set(keywords)].slice(0, 4);
 }
 
-function createFeedbackId() {
-  return `FB-${Math.floor(100000 + Math.random() * 900000)}`;
-}
-
 export function VisitorFeedbackModule({ onBack }) {
   const [rating, setRating] = useState(0);
   const [category, setCategory] = useState("General");
   const [feedbackText, setFeedbackText] = useState("");
+  const [visitorName, setVisitorName] = useState("");
   const [isAnonymous, setIsAnonymous] = useState(false);
   const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [submittedFeedback, setSubmittedFeedback] = useState(null);
 
   const selectedCategory = FEEDBACK_CATEGORIES.find(
@@ -162,12 +161,14 @@ export function VisitorFeedbackModule({ onBack }) {
     setRating(0);
     setCategory("General");
     setFeedbackText("");
+    setVisitorName("");
     setIsAnonymous(false);
     setError("");
+    setIsSubmitting(false);
     setSubmittedFeedback(null);
   }
 
-  function submitFeedback() {
+  async function submitFeedback() {
     if (!rating) {
       setError("Please select a star rating before submitting.");
       return;
@@ -183,26 +184,26 @@ export function VisitorFeedbackModule({ onBack }) {
       return;
     }
 
-    const sentiment = getSentiment(feedbackText, rating);
-    const keywords = extractKeywords(feedbackText, category);
-
-    const feedbackRecord = {
-      feedback_id: createFeedbackId(),
-      visitor_id: isAnonymous ? null : "V-1028",
-      visit_record_id: "VR-2026-0008",
-      rating,
-      category,
-      feedback_text: feedbackText.trim() || "No written comment provided.",
-      is_anonymous: isAnonymous,
-      submitted_at: new Date().toISOString(),
-      status: "New",
-      sentiment_label: sentiment.label,
-      sentiment_score: sentiment.score,
-      keywords_extracted: keywords,
-    };
-
-    setSubmittedFeedback(feedbackRecord);
     setError("");
+    setIsSubmitting(true);
+
+    try {
+      const savedFeedback = await submitFeedbackRecord({
+        rating,
+        category,
+        feedback_text: feedbackText.trim(),
+        is_anonymous: isAnonymous,
+        visitor_name: visitorName.trim(),
+      });
+
+      setSubmittedFeedback(savedFeedback);
+    } catch (err) {
+      setError(
+        "Failed to submit feedback. Please make sure the backend is running."
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   if (submittedFeedback) {
@@ -262,12 +263,12 @@ export function VisitorFeedbackModule({ onBack }) {
 
             
 
-            {submittedFeedback.keywords_extracted.length > 0 && (
+            {(submittedFeedback.keywords_extracted || []).length > 0 && (
               <div className="visitorFeedbackKeywordBox">
                 <span>Detected topics</span>
 
                 <div>
-                  {submittedFeedback.keywords_extracted.map((keyword) => (
+                  {(submittedFeedback.keywords_extracted || []).map((keyword) => (
                     <strong key={keyword}>{keyword}</strong>
                   ))}
                 </div>
@@ -405,11 +406,29 @@ export function VisitorFeedbackModule({ onBack }) {
             </div>
           </section>
 
+          {!isAnonymous && (
+            <section className="visitorFeedbackSection">
+              <label className="visitorFeedbackSectionLabel">
+                Visitor Name Optional
+              </label>
+
+              <input
+                className="visitorFeedbackTextInput"
+                value={visitorName}
+                onChange={(event) => setVisitorName(event.target.value)}
+                placeholder="Example: Nur Alya"
+              />
+            </section>
+          )}
+
           <label className="visitorFeedbackAnonymousToggle">
             <input
               type="checkbox"
               checked={isAnonymous}
-              onChange={(event) => setIsAnonymous(event.target.checked)}
+              onChange={(event) => {
+                setIsAnonymous(event.target.checked);
+                setError("");
+              }}
             />
 
             <div>
@@ -431,9 +450,10 @@ export function VisitorFeedbackModule({ onBack }) {
           <button
             className="visitorFeedbackPrimaryButton"
             onClick={submitFeedback}
+            disabled={isSubmitting}
           >
             <Send size={17} />
-            Submit Feedback
+            {isSubmitting ? "Submitting..." : "Submit Feedback"}
           </button>
 
           <div className="visitorFeedbackFlowNote">
