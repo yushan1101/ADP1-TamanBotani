@@ -4544,6 +4544,27 @@
   line-height: 1.45;
 }
 
+.visitorFeedbackTextInput {
+  width: 100%;
+  min-height: 42px;
+  border: 1px solid #cfd9d2;
+  border-radius: 14px;
+  padding: 0 12px;
+  background: #ffffff;
+  color: #14201a;
+  font-size: 14px;
+}
+
+.visitorFeedbackTextInput::placeholder {
+  color: #7b8d82;
+}
+
+.visitorFeedbackTextInput:focus {
+  outline: none;
+  border-color: #1f543b;
+  box-shadow: 0 0 0 3px rgba(31, 84, 59, 0.12);
+}
+
 .visitorFeedbackSection textarea::placeholder {
   color: #7b8d82;
 }
@@ -4666,6 +4687,11 @@
 
 .visitorFeedbackPrimaryButton:hover {
   filter: brightness(0.95);
+}
+
+.visitorFeedbackPrimaryButton:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
 }
 
 .visitorFeedbackGhostButton {

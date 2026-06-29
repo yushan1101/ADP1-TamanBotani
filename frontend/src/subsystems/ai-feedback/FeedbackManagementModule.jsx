@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   AlertTriangle,
   BarChart3,
@@ -20,6 +20,10 @@ import {
   Users,
 } from "lucide-react";
 import { BackButton, PageHeader } from "./AiFeedbackShared";
+import {
+  getFeedbackRecords,
+  updateFeedbackStatus,
+} from "../../api/feedbackApi";
 import "./AiFeedback.css";
 
 const INITIAL_FEEDBACK = [
@@ -301,6 +305,25 @@ const CATEGORY_OPTIONS = [
 
 const SENTIMENT_OPTIONS = ["All", "Positive", "Neutral", "Negative"];
 
+function normalizeFeedbackRecord(item) {
+  const keywords = Array.isArray(item.keywords_extracted)
+    ? item.keywords_extracted
+    : [];
+
+  return {
+    ...item,
+    visitor_id: item.visitor_id || "",
+    visit_record_id: item.visit_record_id || "",
+    model_used: item.model_used || "Mock Sentiment Rules",
+    staff_response: item.staff_response || "",
+    responded_by: item.responded_by || "",
+    responded_at: item.responded_at || null,
+    is_visible_to_visitor: item.is_visible_to_visitor ?? true,
+    keywords_extracted: keywords,
+    visitor_name: item.visitor_name || "Anonymous Visitor",
+  };
+}
+
 function getSentimentClass(label) {
   if (label === "Positive") return "feedbackPositive";
   if (label === "Negative") return "feedbackNegative";
@@ -356,6 +379,43 @@ export function FeedbackManagementModule({ onBack }) {
   const [sentimentFilter, setSentimentFilter] = useState("All");
   const [search, setSearch] = useState("");
   const [replyDraft, setReplyDraft] = useState("");
+  const [sourceMessage, setSourceMessage] = useState(
+    "Showing prototype feedback until database records are available."
+  );
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadFeedback() {
+      try {
+        const records = await getFeedbackRecords();
+
+        if (!isMounted) return;
+
+        if (records.length > 0) {
+          const normalizedRecords = records.map(normalizeFeedbackRecord);
+          setFeedbackList(normalizedRecords);
+          setSelectedId(normalizedRecords[0].feedback_id);
+          setSourceMessage("Showing feedback records loaded from MySQL.");
+        } else {
+          setSourceMessage(
+            "No database feedback yet. Showing prototype feedback as fallback."
+          );
+        }
+      } catch (err) {
+        if (!isMounted) return;
+        setSourceMessage(
+          "Backend unavailable. Showing prototype feedback as fallback."
+        );
+      }
+    }
+
+    loadFeedback();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const selectedFeedback =
     feedbackList.find((item) => item.feedback_id === selectedId) ||
@@ -366,9 +426,9 @@ export function FeedbackManagementModule({ onBack }) {
       const keyword = search.toLowerCase();
 
       const matchSearch =
-        item.visitor_name.toLowerCase().includes(keyword) ||
-        item.feedback_text.toLowerCase().includes(keyword) ||
-        item.category.toLowerCase().includes(keyword);
+        (item.visitor_name || "").toLowerCase().includes(keyword) ||
+        (item.feedback_text || "").toLowerCase().includes(keyword) ||
+        (item.category || "").toLowerCase().includes(keyword);
 
       const matchCategory =
         categoryFilter === "All" || item.category === categoryFilter;
@@ -475,13 +535,28 @@ export function FeedbackManagementModule({ onBack }) {
     );
   }
 
-  function markReviewed() {
+  async function markReviewed() {
     updateFeedback(selectedFeedback.feedback_id, {
       status: "Reviewed",
     });
+
+    try {
+      const updatedFeedback = await updateFeedbackStatus(
+        selectedFeedback.feedback_id,
+        { status: "Reviewed" }
+      );
+      updateFeedback(
+        selectedFeedback.feedback_id,
+        normalizeFeedbackRecord(updatedFeedback)
+      );
+    } catch (err) {
+      setSourceMessage(
+        "Could not update database status. Local prototype status was updated only."
+      );
+    }
   }
 
-  function sendResponse() {
+  async function sendResponse() {
     const response = replyDraft.trim();
 
     if (!response) return;
@@ -495,6 +570,25 @@ export function FeedbackManagementModule({ onBack }) {
     });
 
     setReplyDraft("");
+
+    try {
+      const updatedFeedback = await updateFeedbackStatus(
+        selectedFeedback.feedback_id,
+        {
+          status: "Responded",
+          staff_response: response,
+          responded_by: "Current Staff",
+        }
+      );
+      updateFeedback(
+        selectedFeedback.feedback_id,
+        normalizeFeedbackRecord(updatedFeedback)
+      );
+    } catch (err) {
+      setSourceMessage(
+        "Could not save staff response to database. Local prototype response was updated only."
+      );
+    }
   }
 
   return (
@@ -567,7 +661,7 @@ export function FeedbackManagementModule({ onBack }) {
             <div className="feedbackInboxHeader">
               <div>
                 <h2>Feedback Inbox</h2>
-                <p>Feedback submitted by visitors after their visit.</p>
+                <p>{sourceMessage}</p>
               </div>
             </div>
 
@@ -654,7 +748,9 @@ export function FeedbackManagementModule({ onBack }) {
           >
             <div className="feedbackDetailTop">
               <div>
-                <span className="feedbackDetailLabel">Selected Feedback</span>
+                <span className="feedbackDetailLabel">
+                  Feedback ID: {selectedFeedback.feedback_id}
+                </span>
                 <h2>{selectedFeedback.category}</h2>
                 <p>{formatDateTime(selectedFeedback.submitted_at)}</p>
               </div>
