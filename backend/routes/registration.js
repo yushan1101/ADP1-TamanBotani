@@ -131,6 +131,7 @@ function normalizeFacePayload(body) {
   const imageData = cleanText(body.faceImageData);
   const liveness = body.liveness && typeof body.liveness === "object" ? body.liveness : {};
   const colorSequence = Array.isArray(liveness.colorSequence) ? liveness.colorSequence : [];
+  const actionSequence = Array.isArray(liveness.actionSequence) ? liveness.actionSequence : [];
   const embedding = Array.isArray(body.embedding) ? body.embedding : [];
 
   if (!imageData || !imageData.startsWith("data:image/")) {
@@ -139,15 +140,17 @@ function normalizeFacePayload(body) {
   if (imageData.length > 750000) {
     return null;
   }
-  if (liveness.passed !== true || colorSequence.length < 8) {
+  if (liveness.passed !== true || (actionSequence.length < 4 && colorSequence.length < 8)) {
     return null;
   }
+
+  const livenessSequence = actionSequence.length ? actionSequence : colorSequence;
 
   return {
     imageData,
     embeddingJson: JSON.stringify(embedding),
     livenessJson: JSON.stringify(liveness),
-    colorSequence: colorSequence.join(", "),
+    colorSequence: livenessSequence.join(", "),
     confidence: Number(body.confidence) || 0.96
   };
 }
@@ -409,7 +412,7 @@ router.post("/kiosk", async (req, res) => {
     const faceEnrollment = await saveFaceEnrollment(conn, visitorId, "Kiosk", body, createdAt);
     if (!faceEnrollment) {
       await conn.rollback();
-      return badRequest(res, "Face image and completed 8-colour liveness check are required.");
+      return badRequest(res, "Face image and completed blink-and-turn liveness check are required.");
     }
 
     await conn.execute(
@@ -516,7 +519,7 @@ router.post("/face-enrollment", async (req, res) => {
     const faceEnrollment = await saveFaceEnrollment(conn, visitorId, "Visitor App", body, enrolledAt);
     if (!faceEnrollment) {
       await conn.rollback();
-      return badRequest(res, "Face image and completed 8-colour liveness check are required.");
+      return badRequest(res, "Face image and completed blink-and-turn liveness check are required.");
     }
 
     await conn.execute(

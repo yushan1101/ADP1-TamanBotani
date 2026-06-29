@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Camera, CheckCircle2, ScanFace } from "lucide-react";
 import { registerKioskVisitor } from "../../api/monitoringApi";
 import { nextId, nowStamp } from "../../data/appState";
-import { captureFaceSnapshot, createDemoFacePayload, FACE_LIVENESS_COLORS } from "./faceIdUtils";
+import { captureFaceSnapshot, createDemoFacePayload, FACE_LIVENESS_STEPS } from "./faceIdUtils";
 
 const emptyForm = {
   name: "",
@@ -22,10 +22,10 @@ export function KioskRegistrationModule({ appState, setAppState }) {
   const [form, setForm] = useState(emptyForm);
   const [message, setMessage] = useState("Waiting for visitor consent.");
   const [submitting, setSubmitting] = useState(false);
-  const [colorIndex, setColorIndex] = useState(0);
+  const [stepIndex, setStepIndex] = useState(0);
 
-  const challengeComplete = colorIndex >= FACE_LIVENESS_COLORS.length;
-  const activeColor = FACE_LIVENESS_COLORS[Math.min(colorIndex, FACE_LIVENESS_COLORS.length - 1)];
+  const challengeComplete = stepIndex >= FACE_LIVENESS_STEPS.length;
+  const activeStep = FACE_LIVENESS_STEPS[Math.min(stepIndex, FACE_LIVENESS_STEPS.length - 1)];
 
   useEffect(() => {
     if (videoRef.current && streamRef.current) videoRef.current.srcObject = streamRef.current;
@@ -41,7 +41,7 @@ export function KioskRegistrationModule({ appState, setAppState }) {
     }
     setStep("capture");
     setMessage("Face camera active. Ask visitor to look directly at the camera.");
-    setColorIndex(0);
+    setStepIndex(0);
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
         video: { facingMode: "user" },
@@ -54,14 +54,14 @@ export function KioskRegistrationModule({ appState, setAppState }) {
     }
   };
 
-  const confirmColor = () => {
-    setColorIndex((current) => Math.min(current + 1, FACE_LIVENESS_COLORS.length));
+  const confirmStep = () => {
+    setStepIndex((current) => Math.min(current + 1, FACE_LIVENESS_STEPS.length));
   };
 
   const captureAndRegister = async () => {
     const imageData = captureFaceSnapshot(videoRef.current);
     if (!imageData || !challengeComplete) {
-      setMessage("Complete the 8-colour liveness check before registering Face ID.");
+      setMessage("Complete the blink-and-turn liveness check before registering Face ID.");
       return;
     }
 
@@ -184,19 +184,20 @@ export function KioskRegistrationModule({ appState, setAppState }) {
               <div className="faceGuide"><ScanFace size={54} /></div>
             </div>
             <strong>Please look directly at the camera</strong>
-            <span>Complete the 8-colour liveness check before registering.</span>
+            <span>Complete the blink-and-turn liveness check before registering.</span>
           </div>
           <div className="faceLivenessPanel kioskFaceLiveness">
-            <div className="faceColorPrompt" style={{ "--challenge-color": activeColor.hex }}>
-              <span>{challengeComplete ? "Liveness complete" : `Step ${colorIndex + 1} of ${FACE_LIVENESS_COLORS.length}`}</span>
-              <strong>{challengeComplete ? "Ready to register" : activeColor.name}</strong>
+            <div className="faceActionPrompt">
+              <span>{challengeComplete ? "Liveness complete" : `Step ${stepIndex + 1} of ${FACE_LIVENESS_STEPS.length}`}</span>
+              <strong>{challengeComplete ? "Ready to register" : activeStep.label}</strong>
+              {!challengeComplete && <em>{activeStep.instruction}</em>}
             </div>
-            <div className="faceColorDots">
-              {FACE_LIVENESS_COLORS.map((color, index) => (
-                <i key={color.name} className={index < colorIndex ? "done" : ""} style={{ backgroundColor: color.hex }} />
+            <div className="faceActionDots">
+              {FACE_LIVENESS_STEPS.map((step, index) => (
+                <i key={step.id} className={index < stepIndex ? "done" : ""} />
               ))}
             </div>
-            {!challengeComplete && <button className="secondaryButton" onClick={confirmColor}>Confirm Colour</button>}
+            {!challengeComplete && <button className="secondaryButton" onClick={confirmStep}>Confirm Step</button>}
           </div>
           <button className="primaryButton wideKioskButton" onClick={captureAndRegister} disabled={!challengeComplete || submitting}><CheckCircle2 size={17} /> {submitting ? "Saving..." : "Capture & Register"}</button>
         </div>

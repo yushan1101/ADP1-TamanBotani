@@ -1,20 +1,20 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Camera, CheckCircle2, ScanFace } from "lucide-react";
 import { enrollFaceId } from "../../api/monitoringApi";
-import { captureFaceSnapshot, createDemoFacePayload, FACE_LIVENESS_COLORS } from "../../subsystems/registration/faceIdUtils";
+import { captureFaceSnapshot, createDemoFacePayload, FACE_LIVENESS_STEPS } from "../../subsystems/registration/faceIdUtils";
 
 export function VisitorFaceIdPage({ appState, setAppState }) {
   const videoRef = useRef(null);
   const streamRef = useRef(null);
   const [agreed, setAgreed] = useState(false);
   const [cameraActive, setCameraActive] = useState(false);
-  const [colorIndex, setColorIndex] = useState(0);
+  const [stepIndex, setStepIndex] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
   const [error, setError] = useState("");
 
-  const challengeComplete = colorIndex >= FACE_LIVENESS_COLORS.length;
-  const activeColor = FACE_LIVENESS_COLORS[Math.min(colorIndex, FACE_LIVENESS_COLORS.length - 1)];
+  const challengeComplete = stepIndex >= FACE_LIVENESS_STEPS.length;
+  const activeStep = FACE_LIVENESS_STEPS[Math.min(stepIndex, FACE_LIVENESS_STEPS.length - 1)];
 
   useEffect(() => {
     if (videoRef.current && streamRef.current) {
@@ -39,21 +39,21 @@ export function VisitorFaceIdPage({ appState, setAppState }) {
       streamRef.current = stream;
       if (videoRef.current) videoRef.current.srcObject = stream;
       setCameraActive(true);
-      setColorIndex(0);
+      setStepIndex(0);
     } catch {
       setError("Camera permission was blocked or no camera was found. Please allow camera access and try again.");
     }
   };
 
-  const confirmColor = () => {
-    setColorIndex((current) => Math.min(current + 1, FACE_LIVENESS_COLORS.length));
+  const confirmStep = () => {
+    setStepIndex((current) => Math.min(current + 1, FACE_LIVENESS_STEPS.length));
   };
 
   const enroll = async () => {
     const pass = appState.passes[0];
     const imageData = captureFaceSnapshot(videoRef.current);
     if (!imageData || !challengeComplete) {
-      setError("Complete the 8-colour liveness check before capture.");
+      setError("Complete the blink-and-turn liveness check before capture.");
       return;
     }
 
@@ -85,7 +85,7 @@ export function VisitorFaceIdPage({ appState, setAppState }) {
     setAppState((current) => ({
       ...current,
       visitors: current.visitors.map((visitor) => visitor.id === pass?.ownerId ? { ...visitor, faceId: true, faceImage: imageData } : visitor),
-      logs: [`Face ID enrolled from visitor mobile app with 8-colour liveness check.`, ...current.logs].slice(0, 20)
+      logs: [`Face ID enrolled from visitor mobile app with blink-and-turn liveness check.`, ...current.logs].slice(0, 20)
     }));
     streamRef.current?.getTracks().forEach((track) => track.stop());
     setDone(true);
@@ -113,22 +113,23 @@ export function VisitorFaceIdPage({ appState, setAppState }) {
           </div>
         </div>
         <strong>Look at the camera</strong>
-        <span>Complete the 8-colour liveness check, then capture your Face ID.</span>
+        <span>Complete the blink-and-turn liveness check, then capture your Face ID.</span>
       </div>
 
       {cameraActive && (
         <div className="faceLivenessPanel">
-          <div className="faceColorPrompt" style={{ "--challenge-color": activeColor.hex }}>
-            <span>{challengeComplete ? "Liveness complete" : `Step ${colorIndex + 1} of ${FACE_LIVENESS_COLORS.length}`}</span>
-            <strong>{challengeComplete ? "Ready to capture" : activeColor.name}</strong>
+          <div className="faceActionPrompt">
+            <span>{challengeComplete ? "Liveness complete" : `Step ${stepIndex + 1} of ${FACE_LIVENESS_STEPS.length}`}</span>
+            <strong>{challengeComplete ? "Ready to capture" : activeStep.label}</strong>
+            {!challengeComplete && <em>{activeStep.instruction}</em>}
           </div>
-          <div className="faceColorDots">
-            {FACE_LIVENESS_COLORS.map((color, index) => (
-              <i key={color.name} className={index < colorIndex ? "done" : ""} style={{ backgroundColor: color.hex }} />
+          <div className="faceActionDots">
+            {FACE_LIVENESS_STEPS.map((step, index) => (
+              <i key={step.id} className={index < stepIndex ? "done" : ""} />
             ))}
           </div>
           {!challengeComplete && (
-            <button className="secondaryButton" onClick={confirmColor}>Confirm Colour</button>
+            <button className="secondaryButton" onClick={confirmStep}>Confirm Step</button>
           )}
         </div>
       )}

@@ -5049,45 +5049,53 @@ textarea {
   background: #fbfdfc;
 }
 
-.faceColorPrompt {
+.faceActionPrompt {
   display: grid;
   place-items: center;
   gap: 5px;
   min-height: 92px;
-  border: 4px solid var(--challenge-color);
+  border: 2px solid #8fc47b;
   border-radius: 12px;
-  background: color-mix(in srgb, var(--challenge-color) 12%, #ffffff);
+  background: #f2faee;
   color: #102016;
 }
 
-.faceColorPrompt span {
+.faceActionPrompt span {
   color: #52685b;
   font-size: 12px;
   font-weight: 850;
   text-transform: uppercase;
 }
 
-.faceColorPrompt strong {
+.faceActionPrompt strong {
   font-size: 24px;
 }
 
-.faceColorDots {
+.faceActionPrompt em {
+  color: #64756b;
+  font-style: normal;
+  font-size: 13px;
+}
+
+.faceActionDots {
   display: grid;
-  grid-template-columns: repeat(8, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 6px;
 }
 
-.faceColorDots i {
+.faceActionDots i {
   display: block;
   height: 18px;
   border: 2px solid rgba(16, 32, 22, 0.16);
   border-radius: 999px;
   opacity: 0.35;
+  background: #dce6df;
 }
 
-.faceColorDots i.done {
+.faceActionDots i.done {
   border-color: #173729;
   opacity: 1;
+  background: #8fc47b;
 }
 
 .kioskFaceLiveness {

@@ -1,12 +1,8 @@
-export const FACE_LIVENESS_COLORS = [
-  { name: "Green", hex: "#38a169" },
-  { name: "Blue", hex: "#3182ce" },
-  { name: "Yellow", hex: "#d69e2e" },
-  { name: "Red", hex: "#e53e3e" },
-  { name: "Purple", hex: "#805ad5" },
-  { name: "Cyan", hex: "#00a3c4" },
-  { name: "Orange", hex: "#dd6b20" },
-  { name: "White", hex: "#f7fafc" }
+export const FACE_LIVENESS_STEPS = [
+  { id: "center", label: "Face centered", instruction: "Look directly at the camera" },
+  { id: "blink", label: "Blink once", instruction: "Blink naturally once" },
+  { id: "turn-left", label: "Turn left", instruction: "Turn your face slightly left" },
+  { id: "turn-right", label: "Turn right", instruction: "Turn your face slightly right" }
 ];
 
 export function captureFaceSnapshot(video) {
@@ -20,7 +16,7 @@ export function captureFaceSnapshot(video) {
 }
 
 export function createDemoFacePayload({ source, visitorId, passId, imageData }) {
-  const colorSequence = FACE_LIVENESS_COLORS.map((color) => color.name);
+  const actionSequence = FACE_LIVENESS_STEPS.map((step) => step.id);
   const seed = `${visitorId || passId || "face"}-${imageData.length}-${Date.now()}`;
   const embedding = Array.from({ length: 16 }, (_, index) => {
     const code = seed.charCodeAt(index % seed.length) || 0;
@@ -35,9 +31,9 @@ export function createDemoFacePayload({ source, visitorId, passId, imageData }) 
     embedding,
     confidence: 0.96,
     liveness: {
-      type: "8-colour challenge",
+      type: "guided blink-and-turn check",
       passed: true,
-      colorSequence,
+      actionSequence,
       completedAt: new Date().toISOString()
     }
   };
