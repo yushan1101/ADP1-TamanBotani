@@ -15,12 +15,15 @@ const app  = express();
 const PORT = process.env.PORT || 3001;
 
 // ─── Middleware ───────────────────────────────────────────────
-app.use(cors({
+const corsOptions = {
   origin: true,
-  methods: ["GET","POST","PATCH","DELETE"],
+  methods: ["GET","POST","PATCH","DELETE","OPTIONS"],
   allowedHeaders: ["Content-Type","Authorization"]
-}));
-app.use(express.json());
+};
+
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
+app.use(express.json({ limit: "10mb" }));
 
 // ─── Health check (public) ────────────────────────────────────
 app.get("/api/health", (req, res) => {
