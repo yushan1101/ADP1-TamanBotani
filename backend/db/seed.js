@@ -5,13 +5,16 @@
 require("dotenv").config();
 const mysql = require("mysql2/promise");
 
+const useSsl = ["true", "required", "1"].includes(String(process.env.DB_SSL || "").toLowerCase());
+
 const DB_CONFIG = {
   host:     process.env.DB_HOST     || "localhost",
   port:     process.env.DB_PORT     || 3306,
   user:     process.env.DB_USER     || "root",
   password: process.env.DB_PASSWORD || "",
   database: process.env.DB_NAME     || "taman_botani",
-  multipleStatements: true
+  multipleStatements: true,
+  ssl:      useSsl ? { rejectUnauthorized: process.env.DB_SSL_REJECT_UNAUTHORIZED !== "false" } : undefined
 };
 
 // ─── Anchor date ────────────────────────────────────────────
